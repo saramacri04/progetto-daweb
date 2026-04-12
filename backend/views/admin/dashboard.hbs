@@ -1,0 +1,95 @@
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold"><i class="bi bi-shield-lock"></i> Pannello di Amministrazione</h2>
+        <p class="text-muted">Riservato ai gestori della piattaforma. Qui puoi monitorare utenti e scambi.</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Sezione Utenti -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h4 class="fw-bold m-0">Utenti Registrati</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Ruolo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each users}}
+                            <tr>
+                                <td>{{this.id}}</td>
+                                <td>{{this.name}} {{this.surname}}</td>
+                                <td>{{this.email}}</td>
+                                <td>
+                                    {{#if (eq this.role 'admin')}}
+                                    <span class="badge bg-danger">Admin</span>
+                                    {{else}}
+                                    <span class="badge bg-secondary">User</span>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    {{#unless users}}
+                    <p class="text-muted text-center my-3">Nessun utente trovato.</p>
+                    {{/unless}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sezione Transazioni -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h4 class="fw-bold m-0">Transazioni in Corso</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Cod.</th>
+                                <th>Prodotto</th>
+                                <th>Acquirente</th>
+                                <th>Prezzo</th>
+                                <th>Stato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each transactions}}
+                            <tr>
+                                <td>#{{this.id}}</td>
+                                <td><strong>{{this.product_title}}</strong></td>
+                                <td>{{this.buyer_name}} {{this.buyer_surname}}</td>
+                                <td>€{{this.agreed_price}}</td>
+                                <td>
+                                    {{#if (eq this.status 'pending')}}
+                                    <span class="badge bg-warning text-dark">In attesa</span>
+                                    {{/if}}
+                                    {{#if (eq this.status 'completed')}}
+                                    <span class="badge bg-success">Completata</span>
+                                    {{/if}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    {{#unless transactions}}
+                    <p class="text-muted text-center my-3">Nessuna transazione trovata.</p>
+                    {{/unless}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

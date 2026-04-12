@@ -1,0 +1,128 @@
+ 
+Facultad de Informática - Universidad de Murcia 
+Desarrollo de Aplicaciones Web 25/26 
+ 
+Convocatoria II – Practica Final 
+ 
+El objetivo de la práctica final es el desarrollo de una web de compraventa de 
+productos de 2ª mano. La web permite registrar usuarios y modificar sus datos 
+personales. En la aplicación se podrá dar de alta, modificar y eliminar productos, 
+gestionar el proceso de compraventa de dichos productos, consultar información 
+relativa a productos en venta, comprados o vendidos, etc. 
+ 
+ATENCIÓN: Se ofrece la posibilidad de integrar el desarrollo de las prácticas de 
+esta asignatura (DAWeb) y de la asignatura de Arquitectura del Software (ArSo). 
+De modo que parte de las prácticas de ArSo pueden ser usadas como parte del 
+backend de nuestra asignatura DAW eb. Esto será opcional, aunque m uy 
+recomendable. Existirá también la posibilidad de implementar el backend 
+haciendo uso de las tecnologías vistas en clase.  
+ 
+La práctica final pretende poner a prueba las competencias adquiridas en la 
+asignatura. La práctica será realizada por grupos de dos alumnos, y consta de 
+dos partes principales:  
+(1) el desarrollo del frontend de la aplicación, que cubre los conocimientos 
+adquiridos en los primeros temas: HTML, CSS, Bootstrap y React. 
+(2) un segundo desarrollo que hace uso de las destrezas adquiridas en el 
+tema de JavaScript y Express (y otras tecnologías estudiadas) y que involucra la 
+implementación / integración del backend, incluyendo el acceso a una base de 
+datos MySQL. 
+ 
+A- Requisitos Generales de Funcionamiento de la aplicación web:  
+La aplicación deberá permitir hacer Login/Logout a los usuarios. Los usuarios 
+deben estar previamente creados en la base de datos y, por ejemplo, contener 
+los siguientes datos básicos: nombre, apellidos, email, clave, rol, … siendo el 
+proceso de alta de usuarios una funcionalidad opcional. 
+Los usuarios de la aplicación pueden tener dos roles: gestor (administrador) y 
+el usuario del servicio . Por lo tanto, la aplicación web debe ofrecer vistas 
+distintas a administradores y usuarios. 
+El gestor (administrador) podrá consultar todos los usuarios registrados en la 
+plataforma, así como todas las compraventas realizadas por los usuarios.  
+Un usuario (no administrador) identificado en la aplicación podrá dar de alta 
+productos para su venta . Los datos básicos de  un producto deben ser: título, 
+descripción, precio, estado (nuevo, como nuevo, buen estado , aceptable, para 
+piezas o reparar), fecha de publicación, categoría, nº de visualizaciones , envío 
+disponible, lugar de recogida y vendedor . Las categorías serán utilizadas para 
+clasificar los productos dentro de la aplicación. 
+El proceso de compraventa de un producto se limitará a la solicitud de compra 
+de un producto por parte del usuario comprador.  
+Los usuarios podrán buscar productos a la venta  y consultar el detalle un 
+determinado producto.  Éstos podrán filtrar los productos por categoría, 
+descripción, estado y precio máximo. Se valorará la correcta paginación de los 
+listados resultantes. 
+Cada usuario debe poder consultar el listado de productos que ha puesto a la 
+venta, así como el listado de aquellos que ha conseguido vender. También, 
+y de manera opcional, un usuario podrá consultar el listado de productos 
+comprados a otros usuarios . Se valorará la correcta paginación de los listados 
+resultantes. 
+Los alumnos tienen libertad para decidir qué datos de las entidades de negocio  
+(usuario, categoría, producto, venta, …) incluyen exactamente en su modelo de 
+datos. Desde la asignatura se permite que cada grupo decida los datos exactos 
+con los que trabajar en cada entidad (partiendo de los básicos que indicamos en 
+este enunciado). Hay que considerar que la variedad o no en los datos permitirá 
+una UI más rica o simple.  
+ 
+A.1 - Alternativas para el backend de nuestra aplicación web:  
+  A.1.1 Integración con Arquitectura del Software (ArSo).   
+Los alumnos van a implementar en la práctica de la asignatura de ArSo una serie 
+de servicios para el backend de la aplicación. Estos se pueden reutilizar para la 
+integración con el frontend de DAWeb. 
+Además, implementarán un mecanismo de autorización basado en OAuth2 y 
+autenticación basada en JWT (JSON Web Token). Por lo tanto, podrán usar dicha 
+implementación para el acceso a nuestra aplicación. 
+ 
+A.1.2 Sin integración con AS, implementando todo el backend desde 
+nuestra asignatura.  
+En esta alternativa será necesario implementar un mecanismo de Login/Logout 
+a través de formularios en páginas y guardando los datos en MySQL.  La 
+persistencia de la información de usuario se debe implementar con las 
+tecnologías vistas en clase. 
+Se debe llevar una  gestión integral de  las entidades de negocio  (usuario, 
+categoría, producto, venta…) en una base de datos MySQL. 
+ 
+B. Requisitos Tecnológicos para la implementación:  
+La página debe aplicar los conocimientos referenciados en la asignatura y usar 
+las tecnologías para el diseño de páginas web de los primeros temas ( HTML, 
+CSS y Bootstrap).   
+Se valorará el uso de CSS Grid en alguna vista . Se implementará un diseño 
+adaptado a móviles siguiendo un diseño RWD (Responsive Web Design) que 
+aplique el uso de Media Queries.  
+Se valorará del diseño web: la selección de la fuente del texto, tamaños de 
+contenidos, uso de los espacios, colores ( https://coolors.co/), fondo, modelo de 
+cajas (margen, borde y relleno), posición, etc.  
+Se valorará el uso de Bootstrap basado en un  Grid Layout y no solo 
+componentes diseñados con Bootstrap. 
+Se valorará el uso de React basado en el uso de componentes web para la 
+creación de páginas.  
+Haciendo uso de JavaScript y las librerías/frameworks vistas/os en clase, 
+implementar la funcionalidad necesaria para el backend. Hacer uso de llamadas 
+asíncronas y Node.js. Para el almacenamiento de datos se usará MySQL.  
+Se valorará el uso de Express de Node.js para levantar un servidor web basado 
+en plantillas (se aconseja el uso de plantillas .hbs -handlebars- para Express).  
+ 
+C. Criterios de evaluación:  
+Para las tecnologías usadas, se considerará la corrección de los diversos 
+aspectos aplicados, así como la variedad en la selección de las funciones 
+usadas para cada tecnología (es decir, cuantos más aspectos de la tecnología 
+se apliquen, mejor será la evaluación). Se utilizará para esta evaluación el código 
+fuente de la entrega y la memoria aportada. 
+Se valorará el desempeño individual de cada miembro del grupo, mediante 
+entrevista donde cada miembro del grupo deberá compartir la aplicación y 
+responder de manera individual a las preguntas planteadas sobre su aplicación. 
+ 
+D. Entrega de la práctica 
+La entrega de la práctica se realizará mediante un archivo comprimido subido a 
+una tarea del aula virtual, por solo uno de los miembros del grupo. El contenido 
+de la entrega incluirá el código fuente de la aplicación (solo necesario el frontend 
+si se integra con el backend de ArSo), sin las dependencias externas  
+(node_modules). 
+Además, se debe entregar una memoria descriptiva del trabajo que no supere 
+los 15 folios y que debe incluir las siguientes secciones: 
+- Portada con el nombre de los miembros del grupo, fecha y asignatura. 
+- Introducción con un resumen de las tecnologías utilizadas y un diagrama del 
+sistema que incluya las tecnologías y elementos desarrollados en ArSo, si se 
+aplican. 
+- Descripción de la funcionalidad del sistema. 
+- Discusión y conclusiones del trabajo realizado. 
+ 
+Fecha entrega: 22 de mayo (incluido) convocatoria II (junio) 
+Fecha entrega: 15 de junio (incluido) convocatoria III (julio) 

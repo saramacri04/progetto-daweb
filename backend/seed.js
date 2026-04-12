@@ -45,6 +45,11 @@ async function runSeed() {
             (2, 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=400', 1),
             (3, 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400', 1)`);
 
+        // 5. Popolamento Transazioni
+        console.log('Inserimento Transazioni...');
+        await pool.query(`INSERT IGNORE INTO transactions (id, product_id, buyer_id, seller_id, agreed_price, status) VALUES 
+            (1, 1, 3, 2, 600.00, 'pending')`);
+
         console.log('✅ Seeding completato con successo!');
         
     } catch (err) {

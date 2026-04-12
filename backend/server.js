@@ -29,10 +29,23 @@ app.engine('hbs', engine({
     extname: '.hbs',
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views', 'layouts'),
-    partialsDir: path.join(__dirname, 'views', 'partials')
+    partialsDir: path.join(__dirname, 'views', 'partials'),
+    helpers: {
+        eq: (v1, v2) => v1 === v2
+    }
 }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Middleware Globale per iniettare la sessione in Handlebars
+app.use((req, res, next) => {
+    res.locals.user = req.session.userId ? {
+        id: req.session.userId,
+        name: req.session.userName,
+        role: req.session.userRole
+    } : null;
+    next();
+});
 
 // Importazione Routes
 const apiRoutes = require('./routes/api');
