@@ -10,6 +10,9 @@ router.get('/status', (req, res) => {
     });
 });
 
-// Aggiungeremo qui altre route API: /users, /products, /transactions, /auth...
+// Rotte API figlie
+const productsRouter = require('./products');
 
+// Registrazione rotte API
+router.use('/products', productsRouter);
 module.exports = router;
