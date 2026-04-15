@@ -2,10 +2,10 @@ const pool = require('../db');
 
 exports.getDashboard = async (req, res) => {
     try {
-        // Recuperiamo gli utenti (escludendo l'hash della password per pulizia, sebbene non vitale per admin internal)
+        // Retrieve the users (excluding the password hash for simplicity, though this is not essential for internal admins)
         const [users] = await pool.query('SELECT id, name, surname, email, role, created_at FROM users ORDER BY created_at DESC');
-        
-        // Recuperiamo le transazioni con join per nomi prodotto e utenti
+
+        // Retrieve transactions using a join based on product names and users
         const [transactions] = await pool.query(`
             SELECT t.id, t.agreed_price, t.status, t.created_at,
                    p.title as product_title,
@@ -18,13 +18,13 @@ exports.getDashboard = async (req, res) => {
             ORDER BY t.created_at DESC
         `);
 
-        res.render('admin/dashboard', { 
-            title: 'Pannello Amministratore',
+        res.render('admin/dashboard', {
+            title: 'Administrator Dashboard',
             users,
             transactions
         });
     } catch (error) {
-        console.error("Errore recupero dashboard admin:", error);
-        res.status(500).send("Errore nel server");
+        console.error("Admin dashboard recovery error:", error);
+        res.status(500).send("Server error");
     }
 };

@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-// Endpoint di test API
+// API test endpoint
 router.get('/status', (req, res) => {
     res.json({
         status: 'success',
-        message: "L'API Backend è attiva e funzionante",
+        message: "The Backend API is up and running",
         timestamp: new Date()
     });
 });
 
-// Rotte API figlie
+// Child API routes
 const productsRouter = require('./products');
 const transactionsRouter = require('./transactions');
 
 
-// Registrazione rotte API
+// Register API routes
 router.use('/products', productsRouter);
 router.use('/transactions', transactionsRouter);
 module.exports = router;

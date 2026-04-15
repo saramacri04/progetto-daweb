@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ success: false, message: 'Autenticazione mancante o formato token invalido.' });
+            return res.status(401).json({ success: false, message: 'Missing authentication or invalid token format.' });
         }
 
         const token = authHeader.split(' ')[1];
@@ -14,6 +14,6 @@ module.exports = (req, res, next) => {
         next();
     } catch (err) {
         console.error('API Auth Middleware Error:', err);
-        return res.status(403).json({ success: false, message: 'Token non valido o scaduto.' });
+        return res.status(403).json({ success: false, message: 'Invalid or expired token.' });
     }
 };

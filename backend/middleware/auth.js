@@ -1,17 +1,17 @@
-// Middleware per proteggere le rotte private
+// Middleware to protect private routes
 exports.isAuthenticated = (req, res, next) => {
     if (req.session && req.session.userId) {
         return next();
     }
-    // Se non autorizzato, rinvialo al login
+    // If not authorized, redirect to login
     res.redirect('/login');
 };
 
-// Middleware per proteggere le rotte admin
+// Middleware to protect admin routes
 exports.isAdmin = (req, res, next) => {
     if (req.session && req.session.userRole === 'admin') {
         return next();
     }
-    // Se non amministratore, rimanda alla home o mostra errore
-    res.status(403).send("Accesso negato: richiesti privilegi di amministratore.");
+    // If not an administrator, deny access
+    res.status(403).send("Access denied: administrator privileges required.");
 };

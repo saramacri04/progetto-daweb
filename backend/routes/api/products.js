@@ -4,16 +4,16 @@ const productController = require('../../controllers/productController');
 const authAPI = require('../../middleware/authAPI');
 const upload = require('../../middleware/upload');
 
-// GET /api/products - Catalogo prodotti
+// GET /api/products - Product catalog
 router.get('/', productController.getProducts);
 
-// POST /api/products - Creazione prodotto (con upload immagini)
+// POST /api/products - Create product (with image upload)
 router.post('/', authAPI, upload.array('images', 5), productController.createProduct);
 
-// PUT /api/products/:id - Modifica prodotto
+// PUT /api/products/:id - Update product
 router.put('/:id', authAPI, productController.updateProduct);
 
-// PATCH /api/products/:id/status - Modifica status (archivia, venduto)
+// PATCH /api/products/:id/status - Update status (archive, sold)
 router.patch('/:id/status', authAPI, productController.archiveProduct);
 
 module.exports = router;

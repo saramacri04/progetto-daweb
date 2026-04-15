@@ -13,11 +13,11 @@ exports.getProducts = async (req, res) => {
             limit = 12 
         } = req.query;
 
-        // Paginazione
+        // Pagination
         const offset = (Number(page) - 1) * Number(limit);
         const limitNum = Number(limit);
 
-        // Costruzione dinamica della query e parametri
+        // Dynamic query building and parameters
         let whereClauses = ["p.status = 'active'"];
         let queryParams = [];
 
@@ -49,12 +49,12 @@ exports.getProducts = async (req, res) => {
 
         const whereString = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
-        // Definizione dell'ordine
+        // Order definition
         let orderString = "ORDER BY p.created_at DESC"; // default newest
         if (sort === 'price_asc') orderString = "ORDER BY p.price ASC";
         if (sort === 'price_desc') orderString = "ORDER BY p.price DESC";
 
-        // Query per i dati
+        // Data query
         const sql = `
             SELECT 
                 p.id, p.title, p.description, p.price, p.\`condition\`, p.status, p.views_count, p.shipping_available, p.pickup_location, p.created_at,
@@ -69,15 +69,15 @@ exports.getProducts = async (req, res) => {
             LIMIT ? OFFSET ?
         `;
 
-        // Query per il count totale (per paginazione)
+        // Total count query (for pagination)
         const countSql = `
             SELECT COUNT(*) AS total
             FROM products p
             ${whereString}
         `;
 
-        // Esecuzione delle query in parallelo
-        const countParams = [...queryParams]; // copiamo i parametri per il count (non include limit/offset)
+        // Execute parallel queries
+        const countParams = [...queryParams]; // copy parameters for count (excludes limit/offset)
         const sqlParams = [...queryParams, limitNum, offset];
 
         const [rows] = await db.query(sql, sqlParams);
@@ -98,13 +98,13 @@ exports.getProducts = async (req, res) => {
         });
 
     } catch (err) {
-        console.error("Errore getProducts:", err);
-        res.status(500).json({ success: false, message: 'Errore interno del server' });
+        console.error("Error getProducts:", err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
 exports.createProduct = async (req, res) => {
-    // Gestione transazione per inserire prodotto e immagini
+    // Transaction management to insert product and images
     const connection = await db.getConnection();
     try {
         await connection.beginTransaction();
@@ -112,7 +112,7 @@ exports.createProduct = async (req, res) => {
         const { title, description, price, condition, shipping_available = 0, pickup_location = null, category_id } = req.body;
         const seller_id = req.user.id; // Dal middleware authAPI
 
-        // 1. Inserimento prodotto
+        // 1. Insert product
         const [result] = await connection.query(
             `INSERT INTO products (title, description, price, \`condition\`, shipping_available, pickup_location, seller_id, category_id) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -120,12 +120,12 @@ exports.createProduct = async (req, res) => {
         );
         const productId = result.insertId;
 
-        // 2. Gestione immagini via Multer
+        // 2. Handle images via Multer
         if (req.files && req.files.length > 0) {
             const imageValues = req.files.map((file, index) => [
                 productId,
-                `/uploads/products/${file.filename}`, // URL pubblico
-                index === 0 ? 1 : 0 // La prima immagine è is_primary
+                `/uploads/products/${file.filename}`, // Public URL
+                index === 0 ? 1 : 0 // The first image is is_primary
             ]);
 
             await connection.query(
@@ -135,11 +135,11 @@ exports.createProduct = async (req, res) => {
         }
 
         await connection.commit();
-        res.status(201).json({ success: true, message: 'Prodotto creato con successo', productId });
+        res.status(201).json({ success: true, message: 'Product created successfully', productId });
     } catch (err) {
         await connection.rollback();
-        console.error("Errore createProduct:", err);
-        res.status(500).json({ success: false, message: 'Errore durante la creazione del prodotto' });
+        console.error("Error createProduct:", err);
+        res.status(500).json({ success: false, message: 'Error creating product' });
     } finally {
         connection.release();
     }
@@ -151,10 +151,10 @@ exports.updateProduct = async (req, res) => {
         const sellerId = req.user.id;
         const { title, description, price, condition, shipping_available, pickup_location, category_id, status } = req.body;
 
-        // Verifica che il prodotto esista e appartenga all'utente
+        // Check that product exists and belongs to user
         const [product] = await db.query('SELECT seller_id FROM products WHERE id = ?', [productId]);
-        if (product.length === 0) return res.status(404).json({ success: false, message: 'Prodotto non trovato' });
-        if (product[0].seller_id !== sellerId) return res.status(403).json({ success: false, message: 'Non autorizzato a modificare questo prodotto' });
+        if (product.length === 0) return res.status(404).json({ success: false, message: 'Product not found' });
+        if (product[0].seller_id !== sellerId) return res.status(403).json({ success: false, message: 'Not authorized to modify this product' });
 
         await db.query(
             `UPDATE products SET title = COALESCE(?, title), description = COALESCE(?, description), 
@@ -165,10 +165,10 @@ exports.updateProduct = async (req, res) => {
             [title, description, price, condition, shipping_available, pickup_location, category_id, status, productId, sellerId]
         );
 
-        res.json({ success: true, message: 'Prodotto aggiornato con successo' });
+        res.json({ success: true, message: 'Product updated successfully' });
     } catch (err) {
-        console.error("Errore updateProduct:", err);
-        res.status(500).json({ success: false, message: 'Errore interno del server' });
+        console.error("Error updateProduct:", err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
@@ -179,7 +179,7 @@ exports.archiveProduct = async (req, res) => {
         const { status } = req.body; // status può essere 'hidden' o 'sold'
 
         if (!['hidden', 'sold'].includes(status)) {
-             return res.status(400).json({ success: false, message: "Status non valido. Scegliere 'hidden' o 'sold'" });
+             return res.status(400).json({ success: false, message: "Invalid status. Choose 'hidden' or 'sold'" });
         }
 
         const [result] = await db.query(
@@ -188,12 +188,12 @@ exports.archiveProduct = async (req, res) => {
         );
 
         if (result.affectedRows === 0) {
-             return res.status(403).json({ success: false, message: 'Non autorizzato o prodotto inesistente' });
+             return res.status(403).json({ success: false, message: 'Not authorized or product non-existent' });
         }
 
-        res.json({ success: true, message: \`Prodotto impostato su \${status}\` });
+        res.json({ success: true, message: `Product set to ${status}` });
     } catch (err) {
-        console.error("Errore archiveProduct:", err);
-        res.status(500).json({ success: false, message: 'Errore interno del server' });
+        console.error("Error archiveProduct:", err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };

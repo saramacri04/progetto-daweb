@@ -1,4 +1,4 @@
--- Creazione del database (se non esiste)
+-- Database Creation (if it does not exist)
 CREATE DATABASE IF NOT EXISTS eco_market DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE eco_market;
 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS products (
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    `condition` ENUM('Nuovo', 'Come nuovo', 'Buono stato', 'Accettabile', 'Per parti di ricambio') NOT NULL,
+    `condition` ENUM('New', 'Like New', 'Good Condition', 'Acceptable', 'For Parts') NOT NULL,
     status ENUM('active', 'sold', 'hidden') DEFAULT 'active',
     views_count INT DEFAULT 0,
     shipping_available BOOLEAN DEFAULT FALSE,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS products (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
--- 4. Product_Images (per immagini multiple del prodotto)
+-- 4. Product_Images (for multiple product images)
 CREATE TABLE IF NOT EXISTS product_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS product_images (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- 5. Favorites (Relazione molti-a-molti tra users e products)
+-- 5. Favorites (Many-to-many relationship between users and products)
 CREATE TABLE IF NOT EXISTS favorites (
     user_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS favorites (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- 6. Transactions (Compra/Vendita)
+-- 6. Transactions (Buy/Sell)
 CREATE TABLE IF NOT EXISTS transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,

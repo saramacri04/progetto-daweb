@@ -1,44 +1,44 @@
 const bcrypt = require('bcrypt');
 const pool = require('../db');
 
-// Autenticazione (Logica login)
+// Authentication (Login logic)
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
-    
+
     try {
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
         const user = rows[0];
 
         if (!user) {
-            return res.render('login', { title: 'Accedi - EcoMarket', error: 'Email non trovata o non valida.' });
+            return res.render('login', { title: 'Login - EcoMarket', error: 'Email address not found or invalid.' });
         }
 
         const match = await bcrypt.compare(password, user.password_hash);
         if (!match) {
-            return res.render('login', { title: 'Accedi - EcoMarket', error: 'Password non corretta.' });
+            return res.render('login', { title: 'Login - EcoMarket', error: 'Incorrect password.' });
         }
 
-        // Login su sessione
+        // Log in to session
         req.session.userId = user.id;
         req.session.userRole = user.role;
         req.session.userName = user.name;
-        
+
         return res.redirect('/');
     } catch (err) {
-        console.error("Errore login:", err);
-        return res.render('login', { title: 'Accedi - EcoMarket', error: 'Errore interno al server.' });
+        console.error("Login error:", err);
+        return res.render('login', { title: 'Login - EcoMarket', error: 'Internal server error.' });
     }
 };
 
-// Registrazione
+// Registration
 exports.registerUser = async (req, res) => {
     const { nombre, apellidos, email, password } = req.body;
 
     try {
-        // Controllo se esiste già l'email
+        // Check if the email address already exists
         const [existing] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
         if (existing.length > 0) {
-            return res.render('register', { title: 'Registrati - EcoMarket', error: 'L\'indirizzo email è già in uso.' });
+            return res.render('register', { title: 'Register - EcoMarket', error: 'Email address already in use.' });
         }
 
         // Hashing della password
@@ -63,7 +63,7 @@ exports.registerUser = async (req, res) => {
 exports.logoutUser = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
-             console.error("Logout error", err);
+            console.error("Logout error", err);
         }
         res.redirect('/');
     });

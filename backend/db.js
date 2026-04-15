@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-// Configurazione Pool di connessioni
+// Connection Pool Configuration
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
@@ -12,14 +12,14 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Test della connessione al DB
+// DB Connection Test
 (async () => {
     try {
         const connection = await pool.getConnection();
-        console.log('Connesso al database MySQL con successo!');
+        console.log('Successfully connected to MySQL database!');
         connection.release();
     } catch (err) {
-        console.error('Errore durante la connessione al database:', err.message);
+        console.error('Error during database connection:', err.message);
     }
 })();
 
