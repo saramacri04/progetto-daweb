@@ -12,7 +12,10 @@ router.get('/status', (req, res) => {
 
 // Rotte API figlie
 const productsRouter = require('./products');
+const transactionsRouter = require('./transactions');
+
 
 // Registrazione rotte API
 router.use('/products', productsRouter);
+router.use('/transactions', transactionsRouter);
 module.exports = router;
