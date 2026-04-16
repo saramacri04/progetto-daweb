@@ -7,9 +7,9 @@
 
 | Stato | Fase | Descrizione | % Progetto | Stima Ore |
 | :---: | :---: | :--- | :---: | :---: |
-| [x] | **1** | Setup Progetto & Server base | 5% | ~5h (Fatto) |
-| [x] | **2** | Configurazione Database & Seed Base | 10% | ~10h (Fatto) |
-| [X] | **3** | Back: HBS Views, Auth, Admin Dashboard | 15% | ~15h (~Fatto) |
+| [x] | **1** | Setup Progetto & Server base | 5% | ~5h |
+| [x] | **2** | Configurazione Database & Seed Base | 10% | ~10h |
+| [X] | **3** | Back: HBS Views, Auth, Admin Dashboard | 15% | ~15h |
 | [X] | **4** | Back: API REST complete (Prodotti, Transazioni, Review) | 15% | ~15h |
 | [ ] | **5** | Front React: Architettura base, Router, Context Auth | 10% | ~10h |
 | [ ] | **6** | Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) | 20% | ~20h |
