@@ -13,9 +13,10 @@ router.get('/status', (req, res) => {
 // Child API routes
 const productsRouter = require('./products');
 const transactionsRouter = require('./transactions');
-
+const reviewsRouter = require('./reviews');
 
 // Register API routes
 router.use('/products', productsRouter);
 router.use('/transactions', transactionsRouter);
+router.use('/reviews', reviewsRouter);
 module.exports = router;
