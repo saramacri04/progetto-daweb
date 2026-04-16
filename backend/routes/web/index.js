@@ -31,5 +31,7 @@ router.get('/logout', authController.logoutUser);
 
 // Protected Area: Admin Panel
 router.get('/admin', isAuthenticated, isAdmin, adminController.getDashboard);
+router.get('/admin/users', isAuthenticated, isAdmin, adminController.getUsers);
+router.get('/admin/transactions', isAuthenticated, isAdmin, adminController.getTransactions);
 
 module.exports = router;
