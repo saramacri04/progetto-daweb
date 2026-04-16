@@ -1,6 +1,6 @@
 # progetto-daweb
 
-## 🚀 Stato Avanzamento Progetto
+## Stato Avanzamento Progetto
 
 **Progresso Totale:**
 ![Progress](https://geps.dev/progress/45) 
