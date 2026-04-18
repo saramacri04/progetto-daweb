@@ -20,8 +20,8 @@
 
 ## Fase 5: Front React: Architettura base, Router, Context Auth (In Corso - 10%) - *Tempo stimato: 10h*
 - [x] Inizializzare **React Router DOM** e definire le rotte base (Main Layout, Auth, e rotte d'errore).
-- [ ] Sviluppare il **Context API per l'Auth** (`AuthContext`) per mantenere lo stato dell'utente connesso, richiamando l'endpoint di verifica sessione o token login.
-- [ ] Creazione dei **servizi chiamate API** (`api.js` o simili con Fetch/Axios) configurati per usare `/api` e scambiare le credenziali se presenti.
+- [x] Sviluppare il **Context API per l'Auth** (`AuthContext`) per mantenere lo stato dell'utente connesso, richiamando l'endpoint di verifica sessione o token login.
+- [x] Creazione dei **servizi chiamate API** (`api.js` o simili con Fetch/Axios) configurati per usare `/api` e scambiare le credenziali se presenti.
 - [ ] Inizializzare il file **`index.css` / `App.css`**, impostando colori root, tipografia e griglia Bootstrap base.
 - [ ] Test di navigazione base delle rotte protette `PrivateRoute`.
 
