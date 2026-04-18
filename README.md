@@ -15,5 +15,5 @@
 | [ ] | **6** | Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) | 20% | ~20h |
 | [ ] | **7** | Front React: Private Views (Dashboard, Add Prodotto, Acquisti) | 15% | ~15h |
 | [ ] | **8** | UI Premium e Test Finale: CSS Grid, Refinishing, Seed testati | 5% | ~5h |
-| [ ] | **9** | Redazione Memoria e Verifica Criteri d'Esame | 5% | ~5h |
+| [ ] | **9** | Redazione Memoria e Verifica Criteri d'Esame | 5% | ~10h |
 | | **Tot** | | **100%** | **~100 Ore** |
