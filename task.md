@@ -22,7 +22,7 @@
 - [x] Inizializzare **React Router DOM** e definire le rotte base (Main Layout, Auth, e rotte d'errore).
 - [x] Sviluppare il **Context API per l'Auth** (`AuthContext`) per mantenere lo stato dell'utente connesso, richiamando l'endpoint di verifica sessione o token login.
 - [x] Creazione dei **servizi chiamate API** (`api.js` o simili con Fetch/Axios) configurati per usare `/api` e scambiare le credenziali se presenti.
-- [ ] Inizializzare il file **`index.css` / `App.css`**, impostando colori root, tipografia e griglia Bootstrap base.
+- [x] Inizializzare il file **`index.css` / `App.css`**, impostando colori root, tipografia e griglia Bootstrap base.
 - [ ] Test di navigazione base delle rotte protette `PrivateRoute`.
 
 ## Fase 6: Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) (Da Iniziare - 20%) - *Tempo stimato: 20h*
