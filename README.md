@@ -3,7 +3,7 @@
 ## Stato Avanzamento Progetto
 
 **Progresso Totale:**
-![Progress](https://geps.dev/progress/45) 
+![Progress](https://geps.dev/progress/55) 
 
 | Stato | Fase | Descrizione | % Progetto | Stima Ore |
 | :---: | :---: | :--- | :---: | :---: |
@@ -11,7 +11,7 @@
 | [x] | **2** | Configurazione Database & Seed Base | 10% | ~10h |
 | [X] | **3** | Back: HBS Views, Auth, Admin Dashboard | 15% | ~15h |
 | [X] | **4** | Back: API REST complete (Prodotti, Transazioni, Review) | 15% | ~15h |
-| [ ] | **5** | Front React: Architettura base, Router, Context Auth | 10% | ~10h |
+| [X] | **5** | Front React: Architettura base, Router, Context Auth | 10% | ~10h |
 | [ ] | **6** | Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) | 20% | ~20h |
 | [ ] | **7** | Front React: Private Views (Dashboard, Add Prodotto, Acquisti) | 15% | ~15h |
 | [ ] | **8** | UI Premium e Test Finale: CSS Grid, Refinishing, Seed testati | 5% | ~5h |
