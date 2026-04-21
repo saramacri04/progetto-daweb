@@ -25,8 +25,8 @@
 - [x] Inizializzare il file **`index.css` / `App.css`**, impostando colori root, tipografia e griglia Bootstrap base.
 - [x] Test di navigazione base delle rotte protette `PrivateRoute`.
 
-## Fase 6: Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) (Da Iniziare - 20%) - *Tempo stimato: 20h*
-- [ ] Creare **Navbar globale** e **Footer** (responsive).
+## Fase 6: Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) (In Corso - 20%) - *Tempo stimato: 20h*
+- [x] Creare **Navbar globale** e **Footer** (responsive).
 - [ ] Sviluppare la **Home Page / Catalogo** implementando CSS Grid per la lista prodotti.
 - [ ] Collegare i **Filtri** (categoria, prezzo max, orderBy) della UI alle API e gestire la paginazione interattiva.
 - [ ] Costruire la vista **Dettaglio Prodotto** che preleva dati completi dall'ID prodotto (incluso carousel foto e info venditore).

@@ -1,0 +1,86 @@
+.custom-navbar {
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-md);
+    padding: 0.8rem 0;
+    transition: all 0.3s ease;
+}
+
+.custom-navbar .navbar-brand {
+    color: var(--color-secondary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: var(--color-primary);
+}
+
+.custom-navbar .nav-link {
+    color: var(--color-gray-dark);
+    font-weight: 500;
+    margin: 0 0.5rem;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+    color: var(--color-primary);
+}
+
+/* Underline effect on hover */
+.custom-navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--color-primary);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.custom-navbar .nav-link:hover::after {
+    width: 80%;
+}
+
+.btn-primary-custom {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1.2rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--color-primary-dark);
+    color: var(--color-white);
+    transform: translateY(-1px);
+}
+
+.btn-outline-custom {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 0.4rem 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.navbar-toggler {
+    border-color: var(--color-gray);
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
