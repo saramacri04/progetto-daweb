@@ -13,7 +13,7 @@ const Footer = () => {
                             <h5 className="mb-0 text-white">EcoMarket</h5>
                         </div>
                         <p>
-                            Your premium destination for buying and selling high-quality second-hand items. 
+                            Your premium destination for buying and selling high-quality second-hand items.
                             Join our eco-friendly community today.
                         </p>
                     </div>
@@ -40,10 +40,10 @@ const Footer = () => {
                         <h5>Newsletter</h5>
                         <p>Subscribe to receive updates on new products and special offers.</p>
                         <form className="d-flex w-100" onSubmit={(e) => e.preventDefault()}>
-                            <input 
-                                type="email" 
-                                className="form-control me-2 bg-dark text-white border-secondary" 
-                                placeholder="Your email address" 
+                            <input
+                                type="email"
+                                className="form-control me-2 bg-dark text-white border-secondary"
+                                placeholder="Your email address"
                                 aria-label="Email for newsletter"
                             />
                             <button className="btn btn-primary-custom" type="submit">Subscribe</button>
@@ -58,9 +58,9 @@ const Footer = () => {
                         &copy; 2026 EcoMarket. DAWeb Final Project. All rights reserved.
                     </div>
                     <div className="col-md-6 text-center text-md-end">
-                        <a href="#" className="social-icon" aria-label="Facebook">F</a>
-                        <a href="#" className="social-icon" aria-label="Twitter">T</a>
-                        <a href="#" className="social-icon" aria-label="Instagram">I</a>
+                        <a href="#" className="social-icon" aria-label="Facebook">Fb</a>
+                        <a href="#" className="social-icon" aria-label="Twitter">Tw</a>
+                        <a href="#" className="social-icon" aria-label="Instagram">Ig</a>
                     </div>
                 </div>
             </div>

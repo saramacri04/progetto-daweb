@@ -1,52 +1,115 @@
 # Istruzioni di Avvio Progetto
 
-Questo progetto completo è diviso in due parti separate che devono comunicare tra loro: **Backend** (Server Node.js ed Express) e **Frontend** (Client React con Vite).
-
-Per far funzionare correttamente la piattaforma in locale sul tuo computer, dovrai tenere sempre aperti **due terminali in parallelo**, partendo dalla cartella principale in cui ti trovi (`/progetto-daweb`).
+Questo progetto è diviso in due parti: **Backend** (Node.js + Express) e **Frontend** (React + Vite).  
+Per farlo funzionare in locale servono **tre terminali**: uno per MySQL, uno per il backend, uno per il frontend.
 
 ---
 
-## 🟢 Terminale 1: Avviare il Server Backend
+## ⚙️ PREREQUISITO — Solo la primissima volta
 
-Questo terminale serve a tenere attive le API REST e le funzionalità del pannello amministrativo (Handlebars). Di logica, il server Node.js girerà sulla porta `3000`.
+Prima di tutto, devi preparare il database. Fallo **una sola volta** alla prima installazione.
 
-Inserisci uno alla volta questi comandi:
+### 1. Avvia MySQL
+```bash
+brew services start mysql
+```
+
+### 2. Importa la struttura del database
+```bash
+cd ~/Desktop/progettodaweb/progetto-daweb/backend
+mysql -u root eco_market < schema.sql
+```
+
+> ⚠️ Se compare l'errore `Unknown database 'eco_market'`, crealo prima:
+> ```bash
+> mysql -u root -e "CREATE DATABASE IF NOT EXISTS eco_market;"
+> mysql -u root eco_market < schema.sql
+> ```
+
+### 3. Carica i dati di prova (opzionale)
+```bash
+node seed.js
+```
+
+> ⚠️ Se `seed.js` dà errore SQL sulla parola `condition`, è un bug del file seed — puoi saltare questo passaggio e procedere comunque. Il sito funzionerà, ma sarà vuoto di prodotti di prova.
+
+---
+
+## 🟢 Terminale 1 — Avviare il Backend
+
+Apri un terminale e inserisci questi comandi **uno alla volta**, partendo sempre dalla cartella root del progetto:
 
 ```bash
-# 1. Entra nella cartella del backend
-cd backend
+# 1. Entra nella cartella backend
+cd ~/Desktop/progettodaweb/progetto-daweb/backend
 
-# 2. Installa le librerie necessarie (Fallo solo la prima volta o se ci sono stati aggiornamenti)
+# 2. Installa le dipendenze (solo la prima volta)
 npm install
 
-# 3. Avvia il server 
+# 3. Avvia il server
 node server.js
 ```
-✅ **Esito corretto:** Il terminale ti restituirà la frase `Server started on http://localhost:3000`. 
-❌ *Non chiudere questo terminale finché stai programmando.*
+
+✅ **Esito corretto:**
+```
+Server started on http://localhost:3000
+Successfully connected to MySQL database!
+```
+
+❌ *Non chiudere questo terminale mentre stai lavorando.*
 
 ---
 
-## 🔵 Terminale 2: Avviare il Client Frontend
+## 🔵 Terminale 2 — Avviare il Frontend
 
-Questo terminale va aperto a parte e serve a compilare l'interfaccia React in tempo reale mentre apportiamo modifiche al codice. Di default si aprirà sulla porta `5173`.
-
-Dopo aver aperto un **nuovo pannello terminale** parallelo nella cartella root:
+Apri un **secondo terminale separato** e inserisci:
 
 ```bash
-# 1. Entra nella cartella del frontend
-cd frontend
+# 1. Entra nella cartella frontend
+cd ~/Desktop/progettodaweb/progetto-daweb/frontend
 
-# 2. Installa le librerie React necessarie (Fallo solo la prima volta)
+# 2. Installa le dipendenze (solo la prima volta)
 npm install
 
-# 3. Mettiti in "ascolto" per compilare in tempo reale
+# 3. Avvia il server di sviluppo
 npm run dev
 ```
-✅ **Esito corretto:** Il terminale stamperà il logo di Vite in verde e blu fornendoti il link per visualizzare il sito (`http://localhost:5173/`).
+
+✅ **Esito corretto:** Vite mostrerà il link → apri **http://localhost:5173** nel browser.
+
+❌ *Non chiudere questo terminale mentre stai lavorando.*
 
 ---
 
-### 💡 Due promemoria essenziali:
-1. **Verificare Database MySQL:** Prima di accendere il Terminale 1, assicurati che il server logico del database (es. XAMPP e MySQL) sia regolarmente acceso e attivo, altrimenti il Backend fallirà la connessione dando errore.
-2. **Setup DB iniziale:** Se non lo hai ancora fatto in precedenza da XAMPP/MySQL Workbench, la primissima volta ricordati di importare o lanciare lo schema di strutturazione database che si trova in `backend/schema.sql` per far esistere le tabelle, e lanciare un veloce `node seed.js` da dentro la cartella `backend` se vuoi auto-generare degli utenti utente e prodotti di prova per testare la grafica.
+## 💡 Promemoria per ogni sessione di lavoro
+
+Ogni volta che riaccendi il computer, prima di avviare backend e frontend:
+
+```bash
+brew services start mysql
+```
+
+Per fermarlo quando hai finito:
+```bash
+brew services stop mysql
+```
+
+---
+
+## 🗂️ Struttura cartelle di riferimento
+
+```
+progetto-daweb/
+├── backend/
+│   ├── .env          ← variabili d'ambiente (DB, JWT, ecc.)
+│   ├── server.js     ← punto di avvio del server
+│   ├── schema.sql    ← struttura del database
+│   ├── seed.js       ← dati di prova
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   └── views/
+└── frontend/
+    └── src/          ← codice React
+```
