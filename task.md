@@ -28,7 +28,7 @@
 ## Fase 6: Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) (In Corso - 20%) - *Tempo stimato: 20h*
 - [x] Creare **Navbar globale** e **Footer** (responsive).
 - [x] Sviluppare la **Home Page / Catalogo** implementando CSS Grid per la lista prodotti.
-- [ ] Collegare i **Filtri** (categoria, prezzo max, orderBy) della UI alle API e gestire la paginazione interattiva.
+- [x] Collegare i **Filtri** (categoria, prezzo max, orderBy) della UI alle API e gestire la paginazione interattiva.
 - [ ] Costruire la vista **Dettaglio Prodotto** che preleva dati completi dall'ID prodotto (incluso carousel foto e info venditore).
 - [ ] Predisporre modale / blocco per fare un'offerta (se utente loggato) o rimandare al login.
 
