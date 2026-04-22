@@ -6,7 +6,7 @@ const ProductCard = ({ product }) => {
     // Generate an image URL; fallback to a placeholder if none exists
     const imageUrl = product.primary_image 
         ? product.primary_image 
-        : 'https://via.placeholder.com/400x300?text=No+Image';
+        : '/placeholder.png';
 
     return (
         <div className="product-card card-premium">
