@@ -81,7 +81,7 @@ npm run dev
 
 ---
 
-## 💡 Promemoria per ogni sessione di lavoro
+## Promemoria per ogni sessione di lavoro
 
 Ogni volta che riaccendi il computer, prima di avviare backend e frontend:
 
@@ -96,7 +96,7 @@ brew services stop mysql
 
 ---
 
-## 🗂️ Struttura cartelle di riferimento
+## Struttura cartelle di riferimento
 
 ```
 progetto-daweb/

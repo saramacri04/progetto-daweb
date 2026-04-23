@@ -32,7 +32,7 @@ async function runSeed() {
         // 3. Seed Products
         // Retrieve user IDs (assuming keys are 1, 2, 3 for simplicity)
         console.log('Inserting Products...');
-        await pool.query(`INSERT IGNORE INTO products (id, title, description, price, condition, seller_id, category_id, shipping_available, pickup_location) VALUES 
+        await pool.query(`INSERT IGNORE INTO products (id, title, description, price, \`condition\`, seller_id, category_id, shipping_available, pickup_location) VALUES 
             (1, 'iPhone 13 Pro Max', 'Perfect condition, 90% battery, comes with box', 600.00, 'Like New', 2, 1, 1, 'Milan'),
             (2, 'Carbon Road Bike', 'Barely used, new tires', 850.50, 'Good Condition', 3, 5, 0, 'Rome'),
             (3, 'IKEA 3-Seater Sofa', 'Comfortable grey sofa, selling due to relocation', 120.00, 'Acceptable', 2, 3, 0, 'Florence')`);
