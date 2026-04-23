@@ -41,10 +41,10 @@ async function runSeed() {
         console.log('Inserting Product Images...');
         await pool.query('DELETE FROM product_images'); // Clear old images to avoid duplicates
         await pool.query(`INSERT INTO product_images (product_id, image_url, is_primary) VALUES 
-            (1, '/uploads/products/iphone-1.png', 1),
-            (1, '/uploads/products/iphone-2.png', 0),
-            (1, '/uploads/products/iphone-3.png', 0),
-            (1, '/uploads/products/iphone-4.png', 0),
+            (1, '/uploads/products/iphone1.png', 1),
+            (1, '/uploads/products/iphone2.png', 0),
+            (1, '/uploads/products/iphone3.png', 0),
+            (1, '/uploads/products/iphone4.png', 0),
             
             (2, '/uploads/products/bike1.png', 1),
             (2, '/uploads/products/bike2.png', 0),

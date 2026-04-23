@@ -1,26 +1,71 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Parse the comma-separated images string from the backend into an array
+    const imageArray = product.images ? product.images.split(',') : [];
+    
+    useEffect(() => {
+        let interval;
+        // Only set up the interval if hovered and there's more than one image
+        if (isHovered && imageArray.length > 1) {
+            interval = setInterval(() => {
+                setCurrentImageIndex((prevIndex) => 
+                    (prevIndex + 1) % imageArray.length
+                );
+            }, 1500); // Change image every 1.5 seconds on hover for better responsiveness
+        } else {
+            // Reset to the primary image when mouse leaves
+            setCurrentImageIndex(0);
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isHovered, imageArray.length]);
+
     // Generate an image URL; fallback to a placeholder if none exists
-    const imageUrl = product.primary_image 
-        ? product.primary_image 
+    const getImageUrl = (url) => {
+        if (!url) return '/placeholder.png';
+        return url.startsWith('http') ? url : `http://localhost:3000${url}`;
+    };
+
+    const imageUrl = imageArray.length > 0 
+        ? getImageUrl(imageArray[currentImageIndex]) 
         : '/placeholder.png';
 
     return (
-        <div className="product-card card-premium">
+        <div 
+            className="product-card card-premium"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <Link to={`/product/${product.id}`} className="product-card-link">
                 <div className="product-image-container">
                     <img 
                         src={imageUrl} 
                         alt={product.title} 
-                        className="product-image" 
+                        className="product-image fade-transition" 
                     />
                     {product.condition && (
                         <span className="product-badge condition-badge">
                             {product.condition}
                         </span>
+                    )}
+                    {/* Small dots indicator if multiple images */}
+                    {imageArray.length > 1 && (
+                        <div className="card-image-indicators">
+                            {imageArray.map((_, idx) => (
+                                <span 
+                                    key={idx} 
+                                    className={`card-dot ${idx === currentImageIndex ? 'active' : ''}`}
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
                 <div className="product-content">
