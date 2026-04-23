@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
+import ProductDetail from './pages/ProductDetail';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="product/:id" element={<ProductDetail />} />
           
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>

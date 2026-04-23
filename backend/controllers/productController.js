@@ -103,6 +103,66 @@ exports.getProducts = async (req, res) => {
     }
 };
 
+exports.getProductById = async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        // Fetch product and seller info
+        const sql = `
+            SELECT 
+                p.id, p.title, p.description, p.price, p.\`condition\`, p.status, p.views_count, p.shipping_available, p.pickup_location, p.created_at,
+                c.id AS category_id, c.name AS category_name, c.icon AS category_icon,
+                u.id AS seller_id, u.name AS seller_name, u.created_at AS seller_joined
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            JOIN users u ON p.seller_id = u.id
+            WHERE p.id = ? AND p.status = 'active'
+        `;
+        
+        const [rows] = await db.query(sql, [productId]);
+        
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        const product = rows[0];
+
+        // Fetch all images for the product
+        const imagesSql = `
+            SELECT image_url, is_primary 
+            FROM product_images 
+            WHERE product_id = ?
+            ORDER BY is_primary DESC, id ASC
+        `;
+        
+        const [images] = await db.query(imagesSql, [productId]);
+        product.images = images.map(img => img.image_url);
+
+        // Fetch average rating for seller (optional enhancement)
+        const ratingSql = `
+            SELECT AVG(rating) as average_rating, COUNT(*) as review_count
+            FROM reviews
+            WHERE reviewee_id = ?
+        `;
+        const [ratings] = await db.query(ratingSql, [product.seller_id]);
+        
+        product.seller_rating = ratings[0].average_rating ? Number(ratings[0].average_rating).toFixed(1) : null;
+        product.seller_reviews_count = ratings[0].review_count;
+
+        // Increment views count
+        await db.query('UPDATE products SET views_count = views_count + 1 WHERE id = ?', [productId]);
+
+        res.json({
+            success: true,
+            data: product
+        });
+
+    } catch (err) {
+        console.error("Error getProductById:", err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
 exports.createProduct = async (req, res) => {
     // Transaction management to insert product and images
     const connection = await db.getConnection();

@@ -5,7 +5,7 @@ Per farlo funzionare in locale servono **tre terminali**: uno per MySQL, uno per
 
 ---
 
-## ⚙️ PREREQUISITO — Solo la primissima volta
+## PREREQUISITO — Solo la prima volta
 
 Prima di tutto, devi preparare il database. Fallo **una sola volta** alla prima installazione.
 
@@ -35,7 +35,7 @@ node seed.js
 
 ---
 
-## 🟢 Terminale 1 — Avviare il Backend
+## Terminale 1 — Avviare il Backend
 
 Apri un terminale e inserisci questi comandi **uno alla volta**, partendo sempre dalla cartella root del progetto:
 
@@ -60,7 +60,7 @@ Successfully connected to MySQL database!
 
 ---
 
-## 🔵 Terminale 2 — Avviare il Frontend
+## Terminale 2 — Avviare il Frontend
 
 Apri un **secondo terminale separato** e inserisci:
 

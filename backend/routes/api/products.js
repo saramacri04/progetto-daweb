@@ -7,6 +7,9 @@ const upload = require('../../middleware/upload');
 // GET /api/products - Product catalog
 router.get('/', productController.getProducts);
 
+// GET /api/products/:id - Product detail
+router.get('/:id', productController.getProductById);
+
 // POST /api/products - Create product (with image upload)
 router.post('/', authAPI, upload.array('images', 5), productController.createProduct);
 
