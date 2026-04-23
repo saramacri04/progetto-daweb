@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 async function runSeed() {
     console.log('🌱 Starting database seeding...');
-    
+
     try {
         // Drop existing tables in reverse order of foreign keys
         // Note: the schema.sql script creates tables but doesn't drop them.
@@ -19,7 +19,7 @@ async function runSeed() {
             ('Mario', 'Rossi', 'mario@email.it', ?, 'user'),
             ('Giulia', 'Bianchi', 'giulia@email.it', ?, 'user')
             ON DUPLICATE KEY UPDATE id=id`, [passwordHash, passwordHash, passwordHash]);
-            
+
         // 2. Seed Categories
         console.log('Inserting Categories...');
         await pool.query(`INSERT IGNORE INTO categories (id, name, description, icon) VALUES 
@@ -39,10 +39,22 @@ async function runSeed() {
 
         // 4. Seed Images
         console.log('Inserting Product Images...');
-        await pool.query(`INSERT IGNORE INTO product_images (product_id, image_url, is_primary) VALUES 
-            (1, 'https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=400', 1),
-            (2, 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=400', 1),
-            (3, 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400', 1)`);
+        await pool.query('DELETE FROM product_images'); // Clear old images to avoid duplicates
+        await pool.query(`INSERT INTO product_images (product_id, image_url, is_primary) VALUES 
+            (1, '/uploads/products/iphone-1.png', 1),
+            (1, '/uploads/products/iphone-2.png', 0),
+            (1, '/uploads/products/iphone-3.png', 0),
+            (1, '/uploads/products/iphone-4.png', 0),
+            
+            (2, '/uploads/products/bike1.png', 1),
+            (2, '/uploads/products/bike2.png', 0),
+            (2, '/uploads/products/bike3.png', 0),
+            (2, '/uploads/products/bike4.png', 0),
+            (2, '/uploads/products/bike5.png', 0),
+            
+            (3, '/uploads/products/sofa1.png', 1),
+            (3, '/uploads/products/sofa2.png', 0),
+            (3, '/uploads/products/sofa3.png', 0)`);
 
         // 5. Seed Transactions
         console.log('Inserting Transactions...');
@@ -50,7 +62,7 @@ async function runSeed() {
             (1, 1, 3, 2, 600.00, 'pending')`);
 
         console.log('✅ Seeding completed successfully!');
-        
+
     } catch (err) {
         console.error('❌ Error during seeding:', err);
     } finally {
