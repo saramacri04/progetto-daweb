@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -9,6 +10,10 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { user } = useAuth();
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [offerAmount, setOfferAmount] = useState('');
+  const [offerStatus, setOfferStatus] = useState({ loading: false, error: null, success: false });
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -47,6 +52,35 @@ const ProductDetail = () => {
   const getImageUrl = (url) => {
     if (!url) return '/placeholder.png';
     return url.startsWith('http') ? url : `http://localhost:3000${url}`;
+  };
+
+  const handleMakeOffer = async (e) => {
+    e.preventDefault();
+    if (!offerAmount || isNaN(offerAmount) || Number(offerAmount) <= 0) {
+      setOfferStatus({ loading: false, error: 'Please enter a valid amount', success: false });
+      return;
+    }
+
+    setOfferStatus({ loading: true, error: null, success: false });
+    try {
+      const response = await api.post('/transactions', {
+        product_id: product.id,
+        offered_price: Number(offerAmount)
+      });
+      
+      if (response.data.success) {
+        setOfferStatus({ loading: false, error: null, success: true });
+        setTimeout(() => {
+          setShowOfferModal(false);
+          setOfferStatus({ loading: false, error: null, success: false });
+          setOfferAmount('');
+        }, 2000);
+      } else {
+        setOfferStatus({ loading: false, error: response.data.message || 'Failed to make offer', success: false });
+      }
+    } catch (err) {
+      setOfferStatus({ loading: false, error: err.response?.data?.message || 'Server error', success: false });
+    }
   };
 
   if (loading) {
@@ -187,10 +221,85 @@ const ProductDetail = () => {
               </div>
             </div>
             <button className="btn btn-contact-seller">Contact Seller</button>
+            
+            {user ? (
+              user.id === product.seller_id ? (
+                <button className="btn btn-secondary btn-make-offer" disabled style={{marginTop: '10px', width: '100%'}}>This is your product</button>
+              ) : (
+                <button className="btn btn-primary btn-make-offer" onClick={() => setShowOfferModal(true)} style={{marginTop: '10px', width: '100%'}}>Make an Offer / Buy</button>
+              )
+            ) : (
+              <Link to="/login" className="btn btn-primary btn-make-offer" style={{marginTop: '10px', width: '100%', display: 'block', textAlign: 'center'}}>Login to Make an Offer</Link>
+            )}
           </div>
 
         </div>
       </div>
+
+      {/* Offer Modal */}
+      {showOfferModal && (
+        <div className="modal-overlay" onClick={() => !offerStatus.loading && setShowOfferModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Make an Offer</h3>
+              <button className="close-btn" onClick={() => setShowOfferModal(false)}>&times;</button>
+            </div>
+            
+            <div className="modal-body">
+              <p className="product-summary"><strong>{product.title}</strong></p>
+              <p className="asking-price">Asking price: <strong>€{Number(product.price).toFixed(2)}</strong></p>
+              
+              {offerStatus.success ? (
+                <div className="alert alert-success">
+                  <i className="bi bi-check-circle"></i> Offer sent successfully! The seller will review it.
+                </div>
+              ) : (
+                <form onSubmit={handleMakeOffer}>
+                  <div className="form-group">
+                    <label htmlFor="offerAmount">Your Offer Amount (€)</label>
+                    <input
+                      type="number"
+                      id="offerAmount"
+                      className="form-control"
+                      step="0.01"
+                      min="0.01"
+                      value={offerAmount}
+                      onChange={(e) => setOfferAmount(e.target.value)}
+                      placeholder="Enter your offer..."
+                      required
+                      autoFocus
+                    />
+                  </div>
+                  
+                  {offerStatus.error && (
+                    <div className="alert alert-danger" style={{marginTop: '10px', padding: '10px', backgroundColor: '#f8d7da', color: '#721c24', borderRadius: '4px'}}>
+                      {offerStatus.error}
+                    </div>
+                  )}
+                  
+                  <div className="modal-actions">
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary" 
+                      onClick={() => setShowOfferModal(false)} 
+                      disabled={offerStatus.loading}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary" 
+                      disabled={offerStatus.loading || !offerAmount}
+                    >
+                      {offerStatus.loading ? 'Sending...' : 'Confirm Offer'}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
