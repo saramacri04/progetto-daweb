@@ -41,20 +41,20 @@ async function runSeed() {
         console.log('Inserting Product Images...');
         await pool.query('DELETE FROM product_images'); // Clear old images to avoid duplicates
         await pool.query(`INSERT INTO product_images (product_id, image_url, is_primary) VALUES 
-            (1, '/uploads/products/iphone1.png', 1),
-            (1, '/uploads/products/iphone2.png', 0),
-            (1, '/uploads/products/iphone3.png', 0),
-            (1, '/uploads/products/iphone4.png', 0),
+            (1, '/uploads/products/iphone/iphone1.png', 1),
+            (1, '/uploads/products/iphone/iphone2.png', 0),
+            (1, '/uploads/products/iphone/iphone3.png', 0),
+            (1, '/uploads/products/iphone/iphone4.png', 0),
             
-            (2, '/uploads/products/bike1.png', 1),
-            (2, '/uploads/products/bike2.png', 0),
-            (2, '/uploads/products/bike3.png', 0),
-            (2, '/uploads/products/bike4.png', 0),
-            (2, '/uploads/products/bike5.png', 0),
+            (2, '/uploads/products/bike/bike1.png', 1),
+            (2, '/uploads/products/bike/bike2.png', 0),
+            (2, '/uploads/products/bike/bike3.png', 0),
+            (2, '/uploads/products/bike/bike4.png', 0),
+            (2, '/uploads/products/bike/bike5.png', 0),
             
-            (3, '/uploads/products/sofa1.png', 1),
-            (3, '/uploads/products/sofa2.png', 0),
-            (3, '/uploads/products/sofa3.png', 0)`);
+            (3, '/uploads/products/sofa/sofa1.png', 1),
+            (3, '/uploads/products/sofa/sofa2.png', 0),
+            (3, '/uploads/products/sofa/sofa3.png', 0)`);
 
         // 5. Seed Transactions
         console.log('Inserting Transactions...');
