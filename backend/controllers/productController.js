@@ -124,7 +124,7 @@ exports.getProductById = async (req, res) => {
             SELECT 
                 p.id, p.title, p.description, p.price, p.\`condition\`, p.status, p.views_count, p.shipping_available, p.pickup_location, p.created_at,
                 c.id AS category_id, c.name AS category_name, c.icon AS category_icon,
-                u.id AS seller_id, u.name AS seller_name, u.created_at AS seller_joined
+                u.id AS seller_id, u.name AS seller_name, u.email AS seller_email, u.created_at AS seller_joined
             FROM products p
             JOIN categories c ON p.category_id = c.id
             JOIN users u ON p.seller_id = u.id

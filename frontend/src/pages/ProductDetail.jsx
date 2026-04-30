@@ -220,7 +220,13 @@ const ProductDetail = () => {
                 )}
               </div>
             </div>
-            <button className="btn btn-contact-seller">Contact Seller</button>
+            <a 
+              href={`mailto:${product.seller_email}?subject=EcoMarket - Informazioni su: ${product.title}`}
+              className="btn btn-contact-seller"
+              style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+            >
+              Contact Seller
+            </a>
             
             {user ? (
               user.id === product.seller_id ? (

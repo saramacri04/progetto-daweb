@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import ProductCard from '../components/ProductCard';
+import SkeletonCard from '../components/SkeletonCard';
 import './Home.css';
 
 const Home = () => {
@@ -122,10 +123,10 @@ const Home = () => {
                 </div>
 
                 {loading ? (
-                    <div className="loading-container text-center py-5">
-                        <div className="spinner-border text-success" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
+                    <div className="product-grid">
+                        {[...Array(12)].map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))}
                     </div>
                 ) : error ? (
                     <div className="alert alert-danger" role="alert">

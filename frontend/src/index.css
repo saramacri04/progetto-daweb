@@ -55,3 +55,17 @@ a:hover {
   min-height: calc(100vh - 60px); /* minus navbar approximately */
   background-color: var(--color-gray-light);
 }
+
+/* Premium UI Button Micro-interactions */
+.btn {
+  transition: all 0.3s ease-in-out !important;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+  transform: translateY(0);
+}

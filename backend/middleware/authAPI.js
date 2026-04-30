@@ -1,19 +1,14 @@
-const jwt = require('jsonwebtoken');
-
 module.exports = (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ success: false, message: 'Missing authentication or invalid token format.' });
-        }
-
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_super_sicuro');
-        
-        req.user = decoded; // { id, email, role }
+    // Il login nel backend usa express-session (req.session), non JWT.
+    // Dobbiamo verificare se l'utente è loggato tramite la sessione.
+    if (req.session && req.session.userId) {
+        req.user = {
+            id: req.session.userId,
+            name: req.session.userName,
+            role: req.session.userRole
+        };
         next();
-    } catch (err) {
-        console.error('API Auth Middleware Error:', err);
-        return res.status(403).json({ success: false, message: 'Invalid or expired token.' });
+    } else {
+        return res.status(401).json({ success: false, message: 'Missing authentication or invalid session.' });
     }
 };
