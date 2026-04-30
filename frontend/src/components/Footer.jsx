@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+    const handleNewsletterSubmit = (e) => {
+        e.preventDefault();
+        alert('Thank you for subscribing to our newsletter!');
+        e.target.reset();
+    };
+
     return (
         <footer className="custom-footer">
             <div className="container">
@@ -22,7 +28,6 @@ const Footer = () => {
                         <h5>Explore</h5>
                         <ul className="list-unstyled">
                             <li className="mb-2"><Link to="/" className="footer-link">Catalog</Link></li>
-                            <li className="mb-2"><Link to="/categories" className="footer-link">Categories</Link></li>
                             <li className="mb-2"><Link to="/how-it-works" className="footer-link">How it Works</Link></li>
                         </ul>
                     </div>
@@ -39,12 +44,13 @@ const Footer = () => {
                     <div className="col-lg-4 col-md-12 mt-4 mt-lg-0">
                         <h5>Newsletter</h5>
                         <p>Subscribe to receive updates on new products and special offers.</p>
-                        <form className="d-flex w-100" onSubmit={(e) => e.preventDefault()}>
+                        <form className="d-flex w-100" onSubmit={handleNewsletterSubmit}>
                             <input
                                 type="email"
                                 className="form-control me-2 bg-dark text-white border-secondary"
                                 placeholder="Your email address"
                                 aria-label="Email for newsletter"
+                                required
                             />
                             <button className="btn btn-primary-custom" type="submit">Subscribe</button>
                         </form>
@@ -54,13 +60,8 @@ const Footer = () => {
                 <hr />
 
                 <div className="row align-items-center footer-bottom">
-                    <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <div className="col-md-12 text-center text-md-start mb-3 mb-md-0">
                         &copy; 2026 EcoMarket. DAWeb Final Project. All rights reserved.
-                    </div>
-                    <div className="col-md-6 text-center text-md-end">
-                        <a href="#" className="social-icon" aria-label="Facebook">Fb</a>
-                        <a href="#" className="social-icon" aria-label="Twitter">Tw</a>
-                        <a href="#" className="social-icon" aria-label="Instagram">Ig</a>
                     </div>
                 </div>
             </div>

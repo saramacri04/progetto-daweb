@@ -50,7 +50,7 @@ const Dashboard = () => {
             }
         } catch (err) {
             console.error(`Error fetching ${tab} data:`, err);
-            setError('Errore durante il caricamento dei dati.');
+            setError('Error loading data.');
         } finally {
             setLoading(false);
         }
@@ -64,7 +64,7 @@ const Dashboard = () => {
             }
         } catch (err) {
             console.error("Error updating transaction:", err);
-            alert(err.response?.data?.message || 'Errore aggiornamento stato');
+            alert(err.response?.data?.message || 'Error updating status');
         }
     };
 
@@ -83,7 +83,7 @@ const Dashboard = () => {
             }
         } catch (err) {
             console.error("Error submitting review:", err);
-            alert(err.response?.data?.message || 'Errore inserimento recensione');
+            alert(err.response?.data?.message || 'Error submitting review');
         }
     };
 
@@ -92,12 +92,12 @@ const Dashboard = () => {
             <table className="table table-hover align-middle">
                 <thead className="table-light">
                     <tr>
-                        <th>Prodotto</th>
-                        <th>Prezzo Accordato</th>
-                        <th>{isBuyer ? 'Venditore' : 'Compratore'}</th>
-                        <th>Stato</th>
-                        <th>Data</th>
-                        <th>Azioni</th>
+                        <th>Product</th>
+                        <th>Agreed Price</th>
+                        <th>{isBuyer ? 'Seller' : 'Buyer'}</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,15 +119,15 @@ const Dashboard = () => {
                             <td>
                                 {!isBuyer && transaction.status === 'pending' && (
                                     <div className="d-flex gap-2">
-                                        <button className="btn btn-sm btn-success" onClick={() => handleTransactionStatus(transaction.id, 'accepted')}>Accetta</button>
-                                        <button className="btn btn-sm btn-outline-danger" onClick={() => handleTransactionStatus(transaction.id, 'rejected')}>Rifiuta</button>
+                                        <button className="btn btn-sm btn-success" onClick={() => handleTransactionStatus(transaction.id, 'accepted')}>Accept</button>
+                                        <button className="btn btn-sm btn-outline-danger" onClick={() => handleTransactionStatus(transaction.id, 'rejected')}>Reject</button>
                                     </div>
                                 )}
                                 {isBuyer && (transaction.status === 'accepted' || transaction.status === 'completed') && !transaction.has_reviewed && (
-                                    <button className="btn btn-sm btn-primary" onClick={() => setReviewModal(transaction)}>Lascia Recensione</button>
+                                    <button className="btn btn-sm btn-primary" onClick={() => setReviewModal(transaction)}>Leave Review</button>
                                 )}
                                 {isBuyer && transaction.has_reviewed && (
-                                    <span className="text-muted small">Recensito ✓</span>
+                                    <span className="text-muted small">Reviewed ✓</span>
                                 )}
                             </td>
                         </tr>
@@ -140,10 +140,10 @@ const Dashboard = () => {
     return (
         <div className="container mt-5 mb-5 dashboard-container position-relative">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Il Mio Profilo: {user?.name || user?.email || 'User'}</h2>
+                <h2>My Profile: {user?.name || user?.email || 'User'}</h2>
                 <div>
                     <Link to="/add-product" className="btn btn-success me-3">
-                        + Aggiungi Prodotto
+                        + Add Product
                     </Link>
                     <button className="btn btn-outline-danger" onClick={logout}>
                         Logout
@@ -157,7 +157,7 @@ const Dashboard = () => {
                         className={`nav-link ${activeTab === 'vetrina' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
                         onClick={() => setActiveTab('vetrina')}
                     >
-                        Vetrina
+                        My Items
                     </button>
                 </li>
                 <li className="nav-item">
@@ -165,7 +165,7 @@ const Dashboard = () => {
                         className={`nav-link ${activeTab === 'venduti' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
                         onClick={() => setActiveTab('venduti')}
                     >
-                        Venduti
+                        Sold
                     </button>
                 </li>
                 <li className="nav-item">
@@ -173,7 +173,7 @@ const Dashboard = () => {
                         className={`nav-link ${activeTab === 'acquisti' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
                         onClick={() => setActiveTab('acquisti')}
                     >
-                        Acquisti Effettuati
+                        Purchases
                     </button>
                 </li>
                 <li className="nav-item">
@@ -181,7 +181,7 @@ const Dashboard = () => {
                         className={`nav-link ${activeTab === 'ordini' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
                         onClick={() => setActiveTab('ordini')}
                     >
-                        Ordini in Arrivo
+                        Incoming Orders
                     </button>
                 </li>
             </ul>
@@ -192,7 +192,7 @@ const Dashboard = () => {
                 {loading ? (
                     <div className="text-center py-5">
                         <div className="spinner-border text-success" role="status">
-                            <span className="visually-hidden">Caricamento...</span>
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     </div>
                 ) : (
@@ -208,7 +208,7 @@ const Dashboard = () => {
                                     </div>
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
-                                        Non hai ancora nessun prodotto in vetrina. <Link to="/add-product">Aggiungi il tuo primo prodotto!</Link>
+                                        You don't have any products in your showcase yet. <Link to="/add-product">Add your first product!</Link>
                                     </div>
                                 )}
                             </div>
@@ -225,7 +225,7 @@ const Dashboard = () => {
                                     </div>
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
-                                        Non hai ancora venduto nessun prodotto.
+                                        You haven't sold any products yet.
                                     </div>
                                 )}
                             </div>
@@ -238,7 +238,7 @@ const Dashboard = () => {
                                     renderTransactionTable(acquisti, true)
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
-                                        Non hai ancora effettuato acquisti (o richieste di acquisto).
+                                        You haven't made any purchases (or purchase requests) yet.
                                     </div>
                                 )}
                             </div>
@@ -251,7 +251,7 @@ const Dashboard = () => {
                                     renderTransactionTable(ordini, false)
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
-                                        Non hai ancora ricevuto ordini per i tuoi prodotti.
+                                        You haven't received any orders for your products yet.
                                     </div>
                                 )}
                             </div>
@@ -260,48 +260,47 @@ const Dashboard = () => {
                 )}
             </div>
 
-            {/* Review Modal */}
             {reviewModal && (
                 <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Lascia una Recensione</h5>
+                                <h5 className="modal-title">Leave a Review</h5>
                                 <button type="button" className="btn-close" onClick={() => setReviewModal(null)}></button>
                             </div>
                             <form onSubmit={handleReviewSubmit}>
                                 <div className="modal-body">
-                                    <p className="mb-3">Transazione per: <strong>{reviewModal.product_title}</strong></p>
+                                    <p className="mb-3">Transaction for: <strong>{reviewModal.product_title}</strong></p>
                                     <div className="mb-3">
-                                        <label className="form-label fw-bold">Valutazione (1-5)</label>
+                                        <label className="form-label fw-bold">Rating (1-5)</label>
                                         <select 
                                             className="form-select" 
                                             value={reviewForm.rating}
                                             onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})}
                                             required
                                         >
-                                            <option value="5">5 - Eccellente</option>
-                                            <option value="4">4 - Molto Buono</option>
-                                            <option value="3">3 - Buono</option>
-                                            <option value="2">2 - Sufficiente</option>
-                                            <option value="1">1 - Scarso</option>
+                                            <option value="5">5 - Excellent</option>
+                                            <option value="4">4 - Very Good</option>
+                                            <option value="3">3 - Good</option>
+                                            <option value="2">2 - Fair</option>
+                                            <option value="1">1 - Poor</option>
                                         </select>
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label fw-bold">Commento</label>
+                                        <label className="form-label fw-bold">Comment</label>
                                         <textarea 
                                             className="form-control" 
                                             rows="4"
                                             value={reviewForm.comment}
                                             onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
                                             required
-                                            placeholder="Condividi la tua esperienza con questo utente..."
+                                            placeholder="Share your experience with this user..."
                                         ></textarea>
                                     </div>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-outline-secondary" onClick={() => setReviewModal(null)}>Annulla</button>
-                                    <button type="submit" className="btn btn-success">Pubblica Recensione</button>
+                                    <button type="button" className="btn btn-outline-secondary" onClick={() => setReviewModal(null)}>Cancel</button>
+                                    <button type="submit" className="btn btn-success">Submit Review</button>
                                 </div>
                             </form>
                         </div>

@@ -21,7 +21,7 @@ const Login = () => {
             await login(email, password);
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Errore durante il login. Controlla le credenziali.');
+            setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
             setLoading(false);
         }
@@ -31,8 +31,8 @@ const Login = () => {
         <div className="container auth-container">
             <div className="card auth-card">
                 <div className="card-header bg-white pb-0 border-0 pt-4">
-                    <h3 className="mb-0 fw-bold text-success">Bentornato!</h3>
-                    <p className="text-muted mt-2">Accedi al tuo account EcoMarket</p>
+                    <h3 className="mb-0 fw-bold text-success">Welcome Back!</h3>
+                    <p className="text-muted mt-2">Log in to your EcoMarket account</p>
                 </div>
                 <div className="card-body pt-3">
                     {error && <div className="alert alert-danger py-2">{error}</div>}
@@ -63,12 +63,12 @@ const Login = () => {
                         <button type="submit" className="btn btn-success w-100 mb-3" disabled={loading}>
                             {loading ? (
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : 'Accedi'}
+                            ) : 'Log In'}
                         </button>
                     </form>
                     <div className="text-center mt-3">
-                        <span className="text-muted">Non hai un account? </span>
-                        <Link to="/register" className="text-success fw-semibold text-decoration-none">Registrati</Link>
+                        <span className="text-muted">Don't have an account? </span>
+                        <Link to="/register" className="text-success fw-semibold text-decoration-none">Sign Up</Link>
                     </div>
                 </div>
             </div>

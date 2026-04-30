@@ -28,11 +28,11 @@ const Register = () => {
         setSuccessMsg('');
 
         if (formData.password !== formData.confirmPassword) {
-            return setError('Le password non corrispondono.');
+            return setError('Passwords do not match.');
         }
 
         if (formData.password.length < 6) {
-            return setError('La password deve contenere almeno 6 caratteri.');
+            return setError('Password must be at least 6 characters long.');
         }
 
         setLoading(true);
@@ -44,12 +44,12 @@ const Register = () => {
                 email: formData.email,
                 password: formData.password
             });
-            setSuccessMsg('Registrazione completata con successo! Reindirizzamento al login...');
+            setSuccessMsg('Registration successful! Redirecting to login...');
             setTimeout(() => {
                 navigate('/login');
             }, 2000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Errore durante la registrazione. Riprova.');
+            setError(err.response?.data?.message || 'Error during registration. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -59,8 +59,8 @@ const Register = () => {
         <div className="container auth-container">
             <div className="card auth-card">
                 <div className="card-header bg-white pb-0 border-0 pt-4">
-                    <h3 className="mb-0 fw-bold text-success">Crea un Account</h3>
-                    <p className="text-muted mt-2">Unisciti alla community EcoMarket</p>
+                    <h3 className="mb-0 fw-bold text-success">Create an Account</h3>
+                    <p className="text-muted mt-2">Join the EcoMarket community</p>
                 </div>
                 <div className="card-body pt-3">
                     {error && <div className="alert alert-danger py-2">{error}</div>}
@@ -69,7 +69,7 @@ const Register = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label className="form-label fw-semibold text-secondary">Nome</label>
+                                <label className="form-label fw-semibold text-secondary">First Name</label>
                                 <input 
                                     type="text" 
                                     className="form-control bg-light border-0" 
@@ -80,7 +80,7 @@ const Register = () => {
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label className="form-label fw-semibold text-secondary">Cognome</label>
+                                <label className="form-label fw-semibold text-secondary">Last Name</label>
                                 <input 
                                     type="text" 
                                     className="form-control bg-light border-0" 
@@ -114,7 +114,7 @@ const Register = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="form-label fw-semibold text-secondary">Conferma Password</label>
+                            <label className="form-label fw-semibold text-secondary">Confirm Password</label>
                             <input 
                                 type="password" 
                                 className="form-control bg-light border-0" 
@@ -127,12 +127,12 @@ const Register = () => {
                         <button type="submit" className="btn btn-success w-100 mb-3" disabled={loading || successMsg}>
                             {loading ? (
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : 'Registrati'}
+                            ) : 'Sign Up'}
                         </button>
                     </form>
                     <div className="text-center mt-3">
-                        <span className="text-muted">Hai già un account? </span>
-                        <Link to="/login" className="text-success fw-semibold text-decoration-none">Accedi</Link>
+                        <span className="text-muted">Already have an account? </span>
+                        <Link to="/login" className="text-success fw-semibold text-decoration-none">Log In</Link>
                     </div>
                 </div>
             </div>

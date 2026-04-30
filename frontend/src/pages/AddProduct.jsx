@@ -33,7 +33,7 @@ const AddProduct = () => {
         
         // Limit to 5 images
         if (files.length > 5) {
-            setError('Puoi caricare un massimo di 5 immagini.');
+            setError('You can upload a maximum of 5 images.');
             return;
         }
 
@@ -77,11 +77,11 @@ const AddProduct = () => {
                 // Redirect to the newly created product
                 navigate(`/product/${response.data.productId}`);
             } else {
-                setError('Errore durante la creazione del prodotto.');
+                setError('Error creating product.');
             }
         } catch (err) {
             console.error('Error creating product:', err);
-            setError(err.response?.data?.message || 'Si è verificato un errore nel server.');
+            setError(err.response?.data?.message || 'A server error occurred.');
         } finally {
             setLoading(false);
         }
@@ -89,7 +89,7 @@ const AddProduct = () => {
 
     return (
         <div className="container mt-5 mb-5 add-product-container">
-            <h2 className="mb-4">Aggiungi un Nuovo Prodotto</h2>
+            <h2 className="mb-4">Add a New Product</h2>
             
             {error && <div className="alert alert-danger">{error}</div>}
 
@@ -97,7 +97,7 @@ const AddProduct = () => {
                 <div className="row">
                     <div className="col-md-8">
                         <div className="mb-3">
-                            <label htmlFor="title" className="form-label fw-bold">Titolo Annuncio *</label>
+                            <label htmlFor="title" className="form-label fw-bold">Listing Title *</label>
                             <input 
                                 type="text" 
                                 className="form-control" 
@@ -106,12 +106,12 @@ const AddProduct = () => {
                                 value={formData.title}
                                 onChange={handleChange}
                                 required 
-                                placeholder="Es: iPhone 13 Pro Max 256GB"
+                                placeholder="E.g. iPhone 13 Pro Max 256GB"
                             />
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="description" className="form-label fw-bold">Descrizione *</label>
+                            <label htmlFor="description" className="form-label fw-bold">Description *</label>
                             <textarea 
                                 className="form-control" 
                                 id="description" 
@@ -120,13 +120,13 @@ const AddProduct = () => {
                                 value={formData.description}
                                 onChange={handleChange}
                                 required
-                                placeholder="Descrivi le condizioni, le specifiche e altri dettagli utili"
+                                placeholder="Describe the condition, specifications, and other useful details"
                             ></textarea>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="price" className="form-label fw-bold">Prezzo (€) *</label>
+                                <label htmlFor="price" className="form-label fw-bold">Price (€) *</label>
                                 <input 
                                     type="number" 
                                     className="form-control" 
@@ -140,7 +140,7 @@ const AddProduct = () => {
                                 />
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="condition" className="form-label fw-bold">Condizione *</label>
+                                <label htmlFor="condition" className="form-label fw-bold">Condition *</label>
                                 <select 
                                     className="form-select" 
                                     id="condition" 
@@ -149,18 +149,18 @@ const AddProduct = () => {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="new">Nuovo</option>
-                                    <option value="like_new">Come nuovo</option>
-                                    <option value="good">Ottimo stato</option>
-                                    <option value="fair">Accettabile</option>
-                                    <option value="parts">Per parti di ricambio / non funzionante</option>
+                                    <option value="new">New</option>
+                                    <option value="like_new">Like new</option>
+                                    <option value="good">Excellent</option>
+                                    <option value="fair">Fair</option>
+                                    <option value="parts">For parts / not working</option>
                                 </select>
                             </div>
                         </div>
 
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="category_id" className="form-label fw-bold">Categoria *</label>
+                                <label htmlFor="category_id" className="form-label fw-bold">Category *</label>
                                 <select 
                                     className="form-select" 
                                     id="category_id" 
@@ -169,11 +169,11 @@ const AddProduct = () => {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="1">Elettronica</option>
-                                    <option value="2">Abbigliamento</option>
-                                    <option value="3">Casa e Giardino</option>
-                                    <option value="4">Motori</option>
-                                    <option value="5">Sport e Tempo Libero</option>
+                                    <option value="1">Electronics</option>
+                                    <option value="2">Clothing</option>
+                                    <option value="3">Home & Garden</option>
+                                    <option value="4">Automotive</option>
+                                    <option value="5">Sports & Leisure</option>
                                 </select>
                             </div>
                             <div className="col-md-6 mb-3 d-flex flex-column justify-content-end">
@@ -187,14 +187,14 @@ const AddProduct = () => {
                                         onChange={handleChange}
                                     />
                                     <label className="form-check-label fw-bold" htmlFor="shipping_available">
-                                        Spedizione Disponibile
+                                        Shipping Available
                                     </label>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="pickup_location" className="form-label fw-bold">Luogo di Ritiro (Opzionale)</label>
+                            <label htmlFor="pickup_location" className="form-label fw-bold">Pickup Location (Optional)</label>
                             <input 
                                 type="text" 
                                 className="form-control" 
@@ -202,14 +202,14 @@ const AddProduct = () => {
                                 name="pickup_location"
                                 value={formData.pickup_location}
                                 onChange={handleChange}
-                                placeholder="Es: Milano, Via Roma"
+                                placeholder="E.g. Milan, Via Roma"
                             />
                         </div>
                     </div>
 
                     <div className="col-md-4">
                         <div className="mb-3">
-                            <label htmlFor="images" className="form-label fw-bold">Immagini Prodotto *</label>
+                            <label htmlFor="images" className="form-label fw-bold">Product Images *</label>
                             <input 
                                 className="form-control" 
                                 type="file" 
@@ -219,12 +219,12 @@ const AddProduct = () => {
                                 multiple
                                 onChange={handleImageChange}
                             />
-                            <div className="form-text">Puoi caricare fino a 5 immagini. La prima sarà la copertina.</div>
+                            <div className="form-text">You can upload up to 5 images. The first one will be the cover.</div>
                         </div>
 
                         {imagePreviews.length > 0 && (
                             <div className="image-previews-container mt-3">
-                                <h6>Anteprima:</h6>
+                                <h6>Preview:</h6>
                                 <div className="d-flex flex-wrap gap-2">
                                     {imagePreviews.map((src, index) => (
                                         <div key={index} className="preview-wrapper position-relative">
@@ -251,15 +251,15 @@ const AddProduct = () => {
                 
                 <div className="d-flex justify-content-end gap-3">
                     <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/dashboard')}>
-                        Annulla
+                        Cancel
                     </button>
                     <button type="submit" className="btn btn-success px-5" disabled={loading}>
                         {loading ? (
                             <>
                                 <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Pubblicazione in corso...
+                                Publishing...
                             </>
-                        ) : 'Pubblica Annuncio'}
+                        ) : 'Publish Listing'}
                     </button>
                 </div>
             </form>

@@ -221,7 +221,7 @@ const ProductDetail = () => {
               </div>
             </div>
             <a 
-              href={`mailto:${product.seller_email}?subject=EcoMarket - Informazioni su: ${product.title}`}
+              href={`mailto:${product.seller_email}?subject=EcoMarket - Information about: ${product.title}`}
               className="btn btn-contact-seller"
               style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
             >

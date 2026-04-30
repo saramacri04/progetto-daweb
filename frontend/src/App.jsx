@@ -9,11 +9,13 @@ import Dashboard from './pages/Dashboard';
 import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/AddProduct';
 import { AboutUs, Contact, Terms, HowItWorks } from './pages/StaticPages';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           {/* Public Routes */}
