@@ -46,7 +46,7 @@
 - [x] Uniformare palette e font per l'aspetto **Premium**, ottimizzando bene Bootstrap + CSS Custom.
 
 ## Fase 9: Seed Finale, Test End-to-End e BugFix (Da Iniziare - 5%) - *Tempo stimato: 10h*
-- [ ] Popolare localmente il MySQL con un database verosimile e denso.
+- [x] Popolare localmente il MySQL con un database verosimile e denso.
 - [ ] Test End-to-End generale: registrazione, messa in vendita, ricerca altro utente, compravendita, valutazione.
 - [ ] Risolvere eventuali errori o warning residui nella console JavaScript.
 

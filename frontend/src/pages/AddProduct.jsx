@@ -149,11 +149,11 @@ const AddProduct = () => {
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="new">New</option>
-                                    <option value="like_new">Like new</option>
-                                    <option value="good">Excellent</option>
-                                    <option value="fair">Fair</option>
-                                    <option value="parts">For parts / not working</option>
+                                    <option value="New">New</option>
+                                    <option value="Like New">Like new</option>
+                                    <option value="Good Condition">Excellent</option>
+                                    <option value="Acceptable">Fair</option>
+                                    <option value="For Parts">For parts / not working</option>
                                 </select>
                             </div>
                         </div>
