@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../services/api';
 import ProductCard from '../components/ProductCard';
 import SkeletonCard from '../components/SkeletonCard';
@@ -62,12 +62,28 @@ const Home = () => {
         setTriggerFetch(prev => prev + 1);
     };
 
+    const catalogRef = useRef(null);
+
+    const scrollToCatalog = () => {
+        if (catalogRef.current) {
+            const yOffset = -20; // Slight offset for breathing room
+            const y = catalogRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    };
+
     const handleNextPage = () => {
-        if (page < totalPages) setPage(prev => prev + 1);
+        if (page < totalPages) {
+            setPage(prev => prev + 1);
+            scrollToCatalog();
+        }
     };
 
     const handlePrevPage = () => {
-        if (page > 1) setPage(prev => prev - 1);
+        if (page > 1) {
+            setPage(prev => prev - 1);
+            scrollToCatalog();
+        }
     };
 
     return (
@@ -77,7 +93,7 @@ const Home = () => {
                 <p>Discover sustainably sourced second-hand items. Buy, sell, and contribute to a greener planet.</p>
             </section>
 
-            <section className="catalog-section">
+            <section className="catalog-section" ref={catalogRef}>
                 <div className="catalog-header mb-4">
                     <h2>Latest Products</h2>
                     
