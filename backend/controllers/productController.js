@@ -10,7 +10,9 @@ exports.getProducts = async (req, res) => {
             max_price, 
             sort = 'newest', 
             page = 1, 
-            limit = 12 
+            limit = 12,
+            seller_id,
+            status = 'active'
         } = req.query;
 
         // Pagination
@@ -18,8 +20,18 @@ exports.getProducts = async (req, res) => {
         const limitNum = Number(limit);
 
         // Dynamic query building and parameters
-        let whereClauses = ["p.status = 'active'"];
+        let whereClauses = [];
         let queryParams = [];
+        
+        if (status && status !== 'all') {
+            whereClauses.push("p.status = ?");
+            queryParams.push(status);
+        }
+
+        if (seller_id) {
+            whereClauses.push("p.seller_id = ?");
+            queryParams.push(Number(seller_id));
+        }
 
         if (q) {
             whereClauses.push("(p.title LIKE ? OR p.description LIKE ?)");

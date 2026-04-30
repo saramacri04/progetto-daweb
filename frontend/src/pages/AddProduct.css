@@ -1,0 +1,19 @@
+.add-product-container {
+    max-width: 900px;
+}
+
+.add-product-form {
+    border: 1px solid #e9ecef;
+}
+
+.preview-wrapper {
+    transition: transform 0.2s ease-in-out;
+}
+
+.preview-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.badge {
+    font-size: 0.75rem;
+}
