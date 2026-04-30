@@ -12,9 +12,14 @@ const Dashboard = () => {
     const [vetrinaProducts, setVetrinaProducts] = useState([]);
     const [vendutiProducts, setVendutiProducts] = useState([]);
     const [acquisti, setAcquisti] = useState([]);
+    const [ordini, setOrdini] = useState([]);
     
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // Review Modal State
+    const [reviewModal, setReviewModal] = useState(null);
+    const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
 
     useEffect(() => {
         if (user) {
@@ -39,6 +44,9 @@ const Dashboard = () => {
             } else if (tab === 'acquisti') {
                 const res = await api.get('/transactions/buyer');
                 if (res.data.success) setAcquisti(res.data.data);
+            } else if (tab === 'ordini') {
+                const res = await api.get('/transactions/seller');
+                if (res.data.success) setOrdini(res.data.data);
             }
         } catch (err) {
             console.error(`Error fetching ${tab} data:`, err);
@@ -48,8 +56,89 @@ const Dashboard = () => {
         }
     };
 
+    const handleTransactionStatus = async (id, status) => {
+        try {
+            const res = await api.patch(`/transactions/${id}/status`, { status });
+            if (res.data.success) {
+                fetchData(activeTab);
+            }
+        } catch (err) {
+            console.error("Error updating transaction:", err);
+            alert(err.response?.data?.message || 'Errore aggiornamento stato');
+        }
+    };
+
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await api.post('/reviews', {
+                transaction_id: reviewModal.id,
+                rating: reviewForm.rating,
+                comment: reviewForm.comment
+            });
+            if (res.data.success) {
+                setReviewModal(null);
+                setReviewForm({ rating: 5, comment: '' });
+                fetchData(activeTab);
+            }
+        } catch (err) {
+            console.error("Error submitting review:", err);
+            alert(err.response?.data?.message || 'Errore inserimento recensione');
+        }
+    };
+
+    const renderTransactionTable = (transactions, isBuyer) => (
+        <div className="table-responsive">
+            <table className="table table-hover align-middle">
+                <thead className="table-light">
+                    <tr>
+                        <th>Prodotto</th>
+                        <th>Prezzo Accordato</th>
+                        <th>{isBuyer ? 'Venditore' : 'Compratore'}</th>
+                        <th>Stato</th>
+                        <th>Data</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {transactions.map(transaction => (
+                        <tr key={transaction.id}>
+                            <td>
+                                <Link to={`/product/${transaction.product_id}`} className="text-decoration-none text-dark fw-bold">
+                                    {transaction.product_title}
+                                </Link>
+                            </td>
+                            <td>€{Number(transaction.agreed_price).toFixed(2)}</td>
+                            <td>{isBuyer ? transaction.seller_name : transaction.buyer_name}</td>
+                            <td>
+                                <span className={`badge ${transaction.status === 'accepted' || transaction.status === 'completed' ? 'bg-success' : transaction.status === 'pending' ? 'bg-warning text-dark' : 'bg-danger'}`}>
+                                    {transaction.status.toUpperCase()}
+                                </span>
+                            </td>
+                            <td>{new Date(transaction.created_at).toLocaleDateString()}</td>
+                            <td>
+                                {!isBuyer && transaction.status === 'pending' && (
+                                    <div className="d-flex gap-2">
+                                        <button className="btn btn-sm btn-success" onClick={() => handleTransactionStatus(transaction.id, 'accepted')}>Accetta</button>
+                                        <button className="btn btn-sm btn-outline-danger" onClick={() => handleTransactionStatus(transaction.id, 'rejected')}>Rifiuta</button>
+                                    </div>
+                                )}
+                                {isBuyer && (transaction.status === 'accepted' || transaction.status === 'completed') && !transaction.has_reviewed && (
+                                    <button className="btn btn-sm btn-primary" onClick={() => setReviewModal(transaction)}>Lascia Recensione</button>
+                                )}
+                                {isBuyer && transaction.has_reviewed && (
+                                    <span className="text-muted small">Recensito ✓</span>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+
     return (
-        <div className="container mt-5 mb-5 dashboard-container">
+        <div className="container mt-5 mb-5 dashboard-container position-relative">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Il Mio Profilo: {user?.name || user?.email || 'User'}</h2>
                 <div>
@@ -85,6 +174,14 @@ const Dashboard = () => {
                         onClick={() => setActiveTab('acquisti')}
                     >
                         Acquisti Effettuati
+                    </button>
+                </li>
+                <li className="nav-item">
+                    <button 
+                        className={`nav-link ${activeTab === 'ordini' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
+                        onClick={() => setActiveTab('ordini')}
+                    >
+                        Ordini in Arrivo
                     </button>
                 </li>
             </ul>
@@ -138,38 +235,7 @@ const Dashboard = () => {
                         {activeTab === 'acquisti' && (
                             <div className="tab-pane active">
                                 {acquisti.length > 0 ? (
-                                    <div className="table-responsive">
-                                        <table className="table table-hover align-middle">
-                                            <thead className="table-light">
-                                                <tr>
-                                                    <th>Prodotto</th>
-                                                    <th>Prezzo Accordato</th>
-                                                    <th>Venditore</th>
-                                                    <th>Stato</th>
-                                                    <th>Data</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {acquisti.map(transaction => (
-                                                    <tr key={transaction.id}>
-                                                        <td>
-                                                            <Link to={`/product/${transaction.product_id}`} className="text-decoration-none text-dark fw-bold">
-                                                                {transaction.product_title}
-                                                            </Link>
-                                                        </td>
-                                                        <td>€{Number(transaction.agreed_price).toFixed(2)}</td>
-                                                        <td>{transaction.seller_name}</td>
-                                                        <td>
-                                                            <span className={`badge ${transaction.status === 'accepted' || transaction.status === 'completed' ? 'bg-success' : transaction.status === 'pending' ? 'bg-warning text-dark' : 'bg-danger'}`}>
-                                                                {transaction.status.toUpperCase()}
-                                                            </span>
-                                                        </td>
-                                                        <td>{new Date(transaction.created_at).toLocaleDateString()}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    renderTransactionTable(acquisti, true)
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
                                         Non hai ancora effettuato acquisti (o richieste di acquisto).
@@ -177,9 +243,71 @@ const Dashboard = () => {
                                 )}
                             </div>
                         )}
+
+                        {/* Tab Ordini in Arrivo */}
+                        {activeTab === 'ordini' && (
+                            <div className="tab-pane active">
+                                {ordini.length > 0 ? (
+                                    renderTransactionTable(ordini, false)
+                                ) : (
+                                    <div className="alert alert-info text-center mt-3">
+                                        Non hai ancora ricevuto ordini per i tuoi prodotti.
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </>
                 )}
             </div>
+
+            {/* Review Modal */}
+            {reviewModal && (
+                <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Lascia una Recensione</h5>
+                                <button type="button" className="btn-close" onClick={() => setReviewModal(null)}></button>
+                            </div>
+                            <form onSubmit={handleReviewSubmit}>
+                                <div className="modal-body">
+                                    <p className="mb-3">Transazione per: <strong>{reviewModal.product_title}</strong></p>
+                                    <div className="mb-3">
+                                        <label className="form-label fw-bold">Valutazione (1-5)</label>
+                                        <select 
+                                            className="form-select" 
+                                            value={reviewForm.rating}
+                                            onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})}
+                                            required
+                                        >
+                                            <option value="5">5 - Eccellente</option>
+                                            <option value="4">4 - Molto Buono</option>
+                                            <option value="3">3 - Buono</option>
+                                            <option value="2">2 - Sufficiente</option>
+                                            <option value="1">1 - Scarso</option>
+                                        </select>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label fw-bold">Commento</label>
+                                        <textarea 
+                                            className="form-control" 
+                                            rows="4"
+                                            value={reviewForm.comment}
+                                            onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
+                                            required
+                                            placeholder="Condividi la tua esperienza con questo utente..."
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-outline-secondary" onClick={() => setReviewModal(null)}>Annulla</button>
+                                    <button type="submit" className="btn btn-success">Pubblica Recensione</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

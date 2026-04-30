@@ -3,7 +3,7 @@
 ## Stato Avanzamento Progetto
 
 **Progresso Totale:**
-![Progress](https://geps.dev/progress/75) 
+![Progress](https://geps.dev/progress/85) 
 
 | Stato | Fase | Descrizione | % Progetto | Stima Ore |
 | :---: | :---: | :--- | :---: | :---: |
@@ -13,7 +13,7 @@
 | [X] | **4** | Back: API REST complete (Prodotti, Transazioni, Review) | 15% | ~15h |
 | [X] | **5** | Front React: Architettura base, Router, Context Auth | 10% | ~10h |
 | [X] | **6** | Front React: Public Views (Home, Catalogo, Dettaglio, Filtri) | 20% | ~20h |
-| [ ] | **7** | Front React: Private Views (Dashboard, Add Prodotto, Acquisti) | 10% | ~15h |
+| [X] | **7** | Front React: Private Views (Dashboard, Add Prodotto, Acquisti) | 10% | ~15h |
 | [ ] | **8** | UI Premium e Test Finale: CSS Grid, Refinishing, Seed testati | 5% | ~5h |
 | [ ] | **9** | Redazione Memoria e Verifica Criteri d'Esame | 10% | ~10h |
 | | **Tot** | | **100%** | **~100 Ore** |

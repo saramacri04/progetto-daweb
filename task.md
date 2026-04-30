@@ -33,10 +33,10 @@
 - [x] Predisporre modale / blocco per fare un'offerta (se utente loggato) o rimandare al login.
 
 ## Fase 7: Front React: Private Views (Dashboard, Add Prodotto, Acquisti) (Da Iniziare - 15%) - *Tempo stimato: 15h*
-- [ ] Costruire la **Dashboard User** con componenti Tab per separare Vetrina, Venduti e Acquisti effettuati.
-- [ ] Implementare Form **Aggiungi Prodotto**, curando gli input (Dropdown Categorie, Condizione) con preview dell'immagine prima del caricamento.
-- [ ] Visualizzare storico ordini in arrivo per accettarli/rifiutarli.
-- [ ] Permettere all'utente di rilasciare una **Review/Valutazione** per una transazione andata a buon fine.
+- [x] Costruire la **Dashboard User** con componenti Tab per separare Vetrina, Venduti e Acquisti effettuati.
+- [x] Implementare Form **Aggiungi Prodotto**, curando gli input (Dropdown Categorie, Condizione) con preview dell'immagine prima del caricamento.
+- [x] Visualizzare storico ordini in arrivo per accettarli/rifiutarli.
+- [x] Permettere all'utente di rilasciare una **Review/Valutazione** per una transazione andata a buon fine.
 
 ## Fase 8: UI Premium e Test Finale: CSS Grid, Refinishing, Seed testati (Da Iniziare - 5%) - *Tempo stimato: 5h*
 - [ ] Perfezionare aspetti di micro-interazione: hover sui pulsanti, loading spinners (skeleton loaders per il catalogo).

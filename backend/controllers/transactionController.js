@@ -33,15 +33,17 @@ exports.getBuyerRequests = async (req, res) => {
         const [rows] = await db.query(`
             SELECT t.id, t.agreed_price, t.status, t.created_at, 
                    p.title as product_title, p.id as product_id, 
-                   u.name as seller_name, u.email as seller_email
+                   u.name as seller_name, u.email as seller_email,
+                   (SELECT COUNT(*) > 0 FROM reviews r WHERE r.transaction_id = t.id AND r.reviewer_id = ?) as has_reviewed
             FROM transactions t
             JOIN products p ON t.product_id = p.id
             JOIN users u ON t.seller_id = u.id
             WHERE t.buyer_id = ?
             ORDER BY t.created_at DESC
-        `, [buyer_id]);
+        `, [buyer_id, buyer_id]);
         
-        res.json({ success: true, data: rows });
+        const mappedRows = rows.map(r => ({ ...r, has_reviewed: !!r.has_reviewed }));
+        res.json({ success: true, data: mappedRows });
     } catch (err) {
         console.error("Error getBuyerRequests:", err);
         res.status(500).json({ success: false, message: 'Error retrieving transactions' });
@@ -54,15 +56,17 @@ exports.getSellerRequests = async (req, res) => {
         const [rows] = await db.query(`
             SELECT t.id, t.agreed_price, t.status, t.created_at, 
                    p.title as product_title, p.id as product_id, 
-                   u.name as buyer_name, u.email as buyer_email
+                   u.name as buyer_name, u.email as buyer_email,
+                   (SELECT COUNT(*) > 0 FROM reviews r WHERE r.transaction_id = t.id AND r.reviewer_id = ?) as has_reviewed
             FROM transactions t
             JOIN products p ON t.product_id = p.id
             JOIN users u ON t.buyer_id = u.id
             WHERE t.seller_id = ?
             ORDER BY t.created_at DESC
-        `, [seller_id]);
+        `, [seller_id, seller_id]);
         
-        res.json({ success: true, data: rows });
+        const mappedRows = rows.map(r => ({ ...r, has_reviewed: !!r.has_reviewed }));
+        res.json({ success: true, data: mappedRows });
     } catch (err) {
         console.error("Error getSellerRequests:", err);
         res.status(500).json({ success: false, message: 'Error retrieving transactions' });
