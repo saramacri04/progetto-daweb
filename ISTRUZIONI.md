@@ -31,7 +31,6 @@ mysql -u root eco_market < schema.sql
 node seed.js
 ```
 
-> ⚠️ Se `seed.js` dà errore SQL sulla parola `condition`, è un bug del file seed — puoi saltare questo passaggio e procedere comunque. Il sito funzionerà, ma sarà vuoto di prodotti di prova.
 
 ---
 

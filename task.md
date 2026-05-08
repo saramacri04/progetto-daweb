@@ -38,14 +38,14 @@
 - [x] Visualizzare storico ordini in arrivo per accettarli/rifiutarli.
 - [x] Permettere all'utente di rilasciare una **Review/Valutazione**.
 
-## Fase 8: UI Premium e Pagine Mancanti (In Lavorazione - 10%) - *Tempo stimato: 10h*
+## Fase 8: UI Premium e Pagine Mancanti (Completata - 10%) - *Tempo stimato: 10h*
 - [x] Implementare pagina di **Login** interattiva.
 - [x] Implementare pagina di **Registrazione** interattiva.
 - [x] Completare i link del **Footer** (pagine statiche).
 - [x] Perfezionare aspetti di micro-interazione: hover sui pulsanti, loading spinners (skeleton loaders per il catalogo).
 - [x] Uniformare palette e font per l'aspetto **Premium**, ottimizzando bene Bootstrap + CSS Custom.
 
-## Fase 9: Seed Finale, Test End-to-End e BugFix (Da Iniziare - 5%) - *Tempo stimato: 10h*
+## Fase 9: Seed Finale, Test End-to-End e BugFix (In Lavorazione - 5%) - *Tempo stimato: 10h*
 - [x] Popolare localmente il MySQL con un database verosimile e denso.
 - [ ] Test End-to-End generale: registrazione, messa in vendita, ricerca altro utente, compravendita, valutazione.
 - [ ] Risolvere eventuali errori o warning residui nella console JavaScript.

@@ -11,6 +11,8 @@ const Home = () => {
 
     // Filters and Pagination State
     const [categoryId, setCategoryId] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [condition, setCondition] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [sort, setSort] = useState('newest');
     const [page, setPage] = useState(1);
@@ -26,6 +28,8 @@ const Home = () => {
                 limit: 12
             };
             if (categoryId) params.category_id = categoryId;
+            if (searchQuery) params.q = searchQuery;
+            if (condition) params.condition = condition;
             if (maxPrice) params.max_price = maxPrice;
             if (sort) params.sort = sort;
 
@@ -56,6 +60,8 @@ const Home = () => {
 
     const handleResetFilters = () => {
         setCategoryId('');
+        setSearchQuery('');
+        setCondition('');
         setMaxPrice('');
         setSort('newest');
         setPage(1);
@@ -98,6 +104,17 @@ const Home = () => {
                     <h2>Latest Products</h2>
                     
                     <form className="filter-bar" onSubmit={handleApplyFilters}>
+                        <div className="filter-group w-100 mb-2">
+                            <label htmlFor="searchQuery">Search</label>
+                            <input 
+                                type="text" 
+                                id="searchQuery" 
+                                value={searchQuery} 
+                                onChange={(e) => setSearchQuery(e.target.value)} 
+                                placeholder="Search by title or description..." 
+                            />
+                        </div>
+                        
                         <div className="filter-group">
                             <label htmlFor="category">Category</label>
                             <select id="category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
@@ -107,6 +124,18 @@ const Home = () => {
                                 <option value="3">Home & Garden</option>
                                 <option value="4">Automotive</option>
                                 <option value="5">Sports & Leisure</option>
+                            </select>
+                        </div>
+                        
+                        <div className="filter-group">
+                            <label htmlFor="condition">Condition</label>
+                            <select id="condition" value={condition} onChange={(e) => setCondition(e.target.value)}>
+                                <option value="">Any Condition</option>
+                                <option value="New">New</option>
+                                <option value="Like New">Like New</option>
+                                <option value="Good Condition">Good Condition</option>
+                                <option value="Acceptable">Acceptable</option>
+                                <option value="For Parts">For Parts</option>
                             </select>
                         </div>
                         

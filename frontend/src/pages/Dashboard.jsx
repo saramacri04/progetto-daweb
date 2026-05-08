@@ -14,6 +14,9 @@ const Dashboard = () => {
     const [acquisti, setAcquisti] = useState([]);
     const [ordini, setOrdini] = useState([]);
     
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -23,30 +26,47 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (user) {
-            fetchData(activeTab);
+            fetchData(activeTab, page);
         }
-    }, [user, activeTab]);
+    }, [user, activeTab, page]);
 
-    const fetchData = async (tab) => {
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        setPage(1);
+    };
+
+    const fetchData = async (tab, currentPage) => {
         setLoading(true);
         setError(null);
         try {
             if (tab === 'vetrina') {
                 const res = await api.get('/products', {
-                    params: { seller_id: user.id, status: 'active', limit: 100 }
+                    params: { seller_id: user.id, status: 'active', limit: 8, page: currentPage }
                 });
-                if (res.data.success) setVetrinaProducts(res.data.data);
+                if (res.data.success) {
+                    setVetrinaProducts(res.data.data);
+                    setTotalPages(res.data.pagination.total_pages || 1);
+                }
             } else if (tab === 'venduti') {
                 const res = await api.get('/products', {
-                    params: { seller_id: user.id, status: 'sold', limit: 100 }
+                    params: { seller_id: user.id, status: 'sold', limit: 8, page: currentPage }
                 });
-                if (res.data.success) setVendutiProducts(res.data.data);
+                if (res.data.success) {
+                    setVendutiProducts(res.data.data);
+                    setTotalPages(res.data.pagination.total_pages || 1);
+                }
             } else if (tab === 'acquisti') {
                 const res = await api.get('/transactions/buyer');
-                if (res.data.success) setAcquisti(res.data.data);
+                if (res.data.success) {
+                    setAcquisti(res.data.data);
+                    setTotalPages(Math.ceil(res.data.data.length / 8) || 1);
+                }
             } else if (tab === 'ordini') {
                 const res = await api.get('/transactions/seller');
-                if (res.data.success) setOrdini(res.data.data);
+                if (res.data.success) {
+                    setOrdini(res.data.data);
+                    setTotalPages(Math.ceil(res.data.data.length / 8) || 1);
+                }
             }
         } catch (err) {
             console.error(`Error fetching ${tab} data:`, err);
@@ -60,7 +80,7 @@ const Dashboard = () => {
         try {
             const res = await api.patch(`/transactions/${id}/status`, { status });
             if (res.data.success) {
-                fetchData(activeTab);
+                fetchData(activeTab, page);
             }
         } catch (err) {
             console.error("Error updating transaction:", err);
@@ -79,7 +99,7 @@ const Dashboard = () => {
             if (res.data.success) {
                 setReviewModal(null);
                 setReviewForm({ rating: 5, comment: '' });
-                fetchData(activeTab);
+                fetchData(activeTab, page);
             }
         } catch (err) {
             console.error("Error submitting review:", err);
@@ -101,7 +121,7 @@ const Dashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions.map(transaction => (
+                    {transactions.slice((page - 1) * 8, page * 8).map(transaction => (
                         <tr key={transaction.id}>
                             <td>
                                 <Link to={`/product/${transaction.product_id}`} className="text-decoration-none text-dark fw-bold">
@@ -137,6 +157,29 @@ const Dashboard = () => {
         </div>
     );
 
+    const renderPagination = () => {
+        if (totalPages <= 1) return null;
+        return (
+            <div className="pagination-container mt-4 mb-4 d-flex justify-content-center align-items-center gap-3 w-100">
+                <button 
+                    className="btn btn-success rounded-pill px-4" 
+                    onClick={() => setPage(p => Math.max(1, p - 1))} 
+                    disabled={page === 1}
+                >
+                    &laquo; Previous
+                </button>
+                <span className="pagination-info font-weight-bold">Page {page} of {totalPages}</span>
+                <button 
+                    className="btn btn-success rounded-pill px-4" 
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))} 
+                    disabled={page === totalPages}
+                >
+                    Next &raquo;
+                </button>
+            </div>
+        );
+    };
+
     return (
         <div className="container mt-5 mb-5 dashboard-container position-relative">
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -155,7 +198,7 @@ const Dashboard = () => {
                 <li className="nav-item">
                     <button 
                         className={`nav-link ${activeTab === 'vetrina' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
-                        onClick={() => setActiveTab('vetrina')}
+                        onClick={() => handleTabChange('vetrina')}
                     >
                         My Items
                     </button>
@@ -163,7 +206,7 @@ const Dashboard = () => {
                 <li className="nav-item">
                     <button 
                         className={`nav-link ${activeTab === 'venduti' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
-                        onClick={() => setActiveTab('venduti')}
+                        onClick={() => handleTabChange('venduti')}
                     >
                         Sold
                     </button>
@@ -171,7 +214,7 @@ const Dashboard = () => {
                 <li className="nav-item">
                     <button 
                         className={`nav-link ${activeTab === 'acquisti' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
-                        onClick={() => setActiveTab('acquisti')}
+                        onClick={() => handleTabChange('acquisti')}
                     >
                         Purchases
                     </button>
@@ -179,7 +222,7 @@ const Dashboard = () => {
                 <li className="nav-item">
                     <button 
                         className={`nav-link ${activeTab === 'ordini' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
-                        onClick={() => setActiveTab('ordini')}
+                        onClick={() => handleTabChange('ordini')}
                     >
                         Incoming Orders
                     </button>
@@ -201,11 +244,14 @@ const Dashboard = () => {
                         {activeTab === 'vetrina' && (
                             <div className="tab-pane active">
                                 {vetrinaProducts.length > 0 ? (
-                                    <div className="dashboard-grid">
-                                        {vetrinaProducts.map(product => (
-                                            <ProductCard key={product.id} product={product} />
-                                        ))}
-                                    </div>
+                                    <>
+                                        <div className="dashboard-grid">
+                                            {vetrinaProducts.map(product => (
+                                                <ProductCard key={product.id} product={product} />
+                                            ))}
+                                        </div>
+                                        {renderPagination()}
+                                    </>
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
                                         You don't have any products in your showcase yet. <Link to="/add-product">Add your first product!</Link>
@@ -218,11 +264,14 @@ const Dashboard = () => {
                         {activeTab === 'venduti' && (
                             <div className="tab-pane active">
                                 {vendutiProducts.length > 0 ? (
-                                    <div className="dashboard-grid">
-                                        {vendutiProducts.map(product => (
-                                            <ProductCard key={product.id} product={product} />
-                                        ))}
-                                    </div>
+                                    <>
+                                        <div className="dashboard-grid">
+                                            {vendutiProducts.map(product => (
+                                                <ProductCard key={product.id} product={product} />
+                                            ))}
+                                        </div>
+                                        {renderPagination()}
+                                    </>
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
                                         You haven't sold any products yet.
@@ -235,7 +284,10 @@ const Dashboard = () => {
                         {activeTab === 'acquisti' && (
                             <div className="tab-pane active">
                                 {acquisti.length > 0 ? (
-                                    renderTransactionTable(acquisti, true)
+                                    <>
+                                        {renderTransactionTable(acquisti, true)}
+                                        {renderPagination()}
+                                    </>
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
                                         You haven't made any purchases (or purchase requests) yet.
@@ -248,7 +300,10 @@ const Dashboard = () => {
                         {activeTab === 'ordini' && (
                             <div className="tab-pane active">
                                 {ordini.length > 0 ? (
-                                    renderTransactionTable(ordini, false)
+                                    <>
+                                        {renderTransactionTable(ordini, false)}
+                                        {renderPagination()}
+                                    </>
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
                                         You haven't received any orders for your products yet.
