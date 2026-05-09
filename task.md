@@ -51,7 +51,7 @@
 - [ ] Risolvere eventuali errori o warning residui nella console JavaScript.
 
 ## Fase 10: Redazione Memoria e Verifica Criteri d'Esame (Da Iniziare - 5%) - *Tempo stimato: 9h*
-- [ ] Ricontrollare il documento d'enunciato `Proyecto_Final_DAWeb_2026.txt` riga per riga e spuntare i requisiti.
+- [x] Ricontrollare il documento d'enunciato `Proyecto_Final_DAWeb_2026.txt` riga per riga e spuntare i requisiti.
 - [x] Scrivere memoria di max 15 folios.
-- [ ] Disegnare schema / diagramma software (Frontend React <-> Backend API e DB).
+- [x] Disegnare schema / diagramma software (Frontend React <-> Backend API e DB).
 - [ ] Preparare la discussione orale (architettura, design pattern React e Node usati).
