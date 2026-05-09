@@ -347,7 +347,11 @@ const Dashboard = () => {
                                             className="form-control" 
                                             rows="4"
                                             value={reviewForm.comment}
-                                            onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
+                                            onChange={e => {
+                                                e.target.setCustomValidity('');
+                                                setReviewForm({...reviewForm, comment: e.target.value});
+                                            }}
+                                            onInvalid={e => e.target.setCustomValidity('Please fill out this field')}
                                             required
                                             placeholder="Share your experience with this user..."
                                         ></textarea>

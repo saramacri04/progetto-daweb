@@ -154,6 +154,9 @@ const ProductDetail = () => {
             <span className="category-badge">
               <i className={product.category_icon || "bi bi-tag"}></i> {product.category_name}
             </span>
+            {product.status === 'sold' && (
+              <span className="badge bg-danger ms-2" style={{fontSize: '0.9em', padding: '0.5em 0.8em'}}>SOLD</span>
+            )}
             <h1 className="product-title">{product.title}</h1>
             <p className="product-price">€ {Number(product.price).toFixed(2)}</p>
           </div>
@@ -220,22 +223,28 @@ const ProductDetail = () => {
                 )}
               </div>
             </div>
-            <a 
-              href={`mailto:${product.seller_email}?subject=EcoMarket - Information about: ${product.title}`}
-              className="btn btn-contact-seller"
-              style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
-            >
-              Contact Seller
-            </a>
-            
-            {user ? (
-              user.id === product.seller_id ? (
-                <button className="btn btn-secondary btn-make-offer" disabled style={{marginTop: '10px', width: '100%'}}>This is your product</button>
-              ) : (
-                <button className="btn btn-primary btn-make-offer" onClick={() => setShowOfferModal(true)} style={{marginTop: '10px', width: '100%'}}>Make an Offer / Buy</button>
-              )
+            {user && user.id === product.seller_id ? (
+              <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                <p style={{ fontWeight: 'bold', color: '#6c757d', marginBottom: 0 }}>This is your product</p>
+              </div>
             ) : (
-              <Link to="/login" className="btn btn-primary btn-make-offer" style={{marginTop: '10px', width: '100%', display: 'block', textAlign: 'center'}}>Login to Make an Offer</Link>
+              <>
+                <a 
+                  href={`mailto:${product.seller_email}?subject=EcoMarket - Information about: ${product.title}`}
+                  className="btn btn-contact-seller"
+                  style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+                >
+                  Contact Seller
+                </a>
+                
+                {product.status === 'sold' ? (
+                  <button className="btn btn-secondary btn-make-offer" disabled style={{marginTop: '10px', width: '100%'}}>Product Sold</button>
+                ) : user ? (
+                  <button className="btn btn-primary btn-make-offer" onClick={() => setShowOfferModal(true)} style={{marginTop: '10px', width: '100%'}}>Make an Offer / Buy</button>
+                ) : (
+                  <Link to="/login" className="btn btn-primary btn-make-offer" style={{marginTop: '10px', width: '100%', display: 'block', textAlign: 'center'}}>Login to Make an Offer</Link>
+                )}
+              </>
             )}
           </div>
 

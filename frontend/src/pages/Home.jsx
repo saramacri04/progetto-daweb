@@ -71,11 +71,7 @@ const Home = () => {
     const catalogRef = useRef(null);
 
     const scrollToCatalog = () => {
-        if (catalogRef.current) {
-            const yOffset = -20; // Slight offset for breathing room
-            const y = catalogRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({ top: y, behavior: 'smooth' });
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleNextPage = () => {

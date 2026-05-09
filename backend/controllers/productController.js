@@ -128,7 +128,7 @@ exports.getProductById = async (req, res) => {
             FROM products p
             JOIN categories c ON p.category_id = c.id
             JOIN users u ON p.seller_id = u.id
-            WHERE p.id = ? AND p.status = 'active'
+            WHERE p.id = ? AND p.status IN ('active', 'sold')
         `;
         
         const [rows] = await db.query(sql, [productId]);
