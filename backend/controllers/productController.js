@@ -250,8 +250,8 @@ exports.archiveProduct = async (req, res) => {
         const sellerId = req.user.id;
         const { status } = req.body; // status può essere 'hidden' o 'sold'
 
-        if (!['hidden', 'sold'].includes(status)) {
-             return res.status(400).json({ success: false, message: "Invalid status. Choose 'hidden' or 'sold'" });
+        if (!['hidden', 'sold', 'active'].includes(status)) {
+             return res.status(400).json({ success: false, message: "Invalid status. Choose 'active', 'hidden' or 'sold'" });
         }
 
         const [result] = await db.query(
@@ -266,6 +266,39 @@ exports.archiveProduct = async (req, res) => {
         res.json({ success: true, message: `Product set to ${status}` });
     } catch (err) {
         console.error("Error archiveProduct:", err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+exports.deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const sellerId = req.user.id;
+        const fs = require('fs');
+        const path = require('path');
+
+        // Check if product exists and belongs to user
+        const [product] = await db.query('SELECT seller_id FROM products WHERE id = ?', [productId]);
+        if (product.length === 0) return res.status(404).json({ success: false, message: 'Product not found' });
+        if (product[0].seller_id !== sellerId) return res.status(403).json({ success: false, message: 'Not authorized to delete this product' });
+
+        // Fetch images to delete them from filesystem
+        const [images] = await db.query('SELECT image_url FROM product_images WHERE product_id = ?', [productId]);
+        
+        for (const img of images) {
+            const urlPath = img.image_url.startsWith('/') ? img.image_url.substring(1) : img.image_url;
+            const imgPath = path.join(__dirname, '..', 'public', urlPath);
+            if (fs.existsSync(imgPath)) {
+                fs.unlinkSync(imgPath);
+            }
+        }
+
+        // Delete product from database (cascade will delete product_images rows)
+        await db.query('DELETE FROM products WHERE id = ?', [productId]);
+
+        res.json({ success: true, message: 'Product deleted successfully' });
+    } catch (err) {
+        console.error("Error deleteProduct:", err);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };

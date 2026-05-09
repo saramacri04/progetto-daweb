@@ -16,7 +16,10 @@ router.post('/', authAPI, upload.array('images', 5), productController.createPro
 // PUT /api/products/:id - Update product
 router.put('/:id', authAPI, productController.updateProduct);
 
-// PATCH /api/products/:id/status - Update status (archive, sold)
+// PATCH /api/products/:id/status - Update status (archive, sold, active)
 router.patch('/:id/status', authAPI, productController.archiveProduct);
+
+// DELETE /api/products/:id - Delete product
+router.delete('/:id', authAPI, productController.deleteProduct);
 
 module.exports = router;

@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import ProductCard from '../components/ProductCard';
+import EditProductModal from '../components/EditProductModal';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -10,6 +11,7 @@ const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('vetrina');
     
     const [vetrinaProducts, setVetrinaProducts] = useState([]);
+    const [nascostiProducts, setNascostiProducts] = useState([]);
     const [vendutiProducts, setVendutiProducts] = useState([]);
     const [acquisti, setAcquisti] = useState([]);
     const [ordini, setOrdini] = useState([]);
@@ -23,6 +25,9 @@ const Dashboard = () => {
     // Review Modal State
     const [reviewModal, setReviewModal] = useState(null);
     const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
+
+    // Edit Modal State
+    const [editProductModal, setEditProductModal] = useState(null);
 
     useEffect(() => {
         if (user) {
@@ -55,6 +60,14 @@ const Dashboard = () => {
                     setVendutiProducts(res.data.data);
                     setTotalPages(res.data.pagination.total_pages || 1);
                 }
+            } else if (tab === 'nascosti') {
+                const res = await api.get('/products', {
+                    params: { seller_id: user.id, status: 'hidden', limit: 8, page: currentPage }
+                });
+                if (res.data.success) {
+                    setNascostiProducts(res.data.data);
+                    setTotalPages(res.data.pagination.total_pages || 1);
+                }
             } else if (tab === 'acquisti') {
                 const res = await api.get('/transactions/buyer');
                 if (res.data.success) {
@@ -85,6 +98,44 @@ const Dashboard = () => {
         } catch (err) {
             console.error("Error updating transaction:", err);
             alert(err.response?.data?.message || 'Error updating status');
+        }
+    };
+
+    const handleProductStatus = async (id, newStatus) => {
+        try {
+            const res = await api.patch(`/products/${id}/status`, { status: newStatus });
+            if (res.data.success) {
+                fetchData(activeTab, page);
+            }
+        } catch (err) {
+            console.error("Error updating product status:", err);
+            alert(err.response?.data?.message || 'Error updating status');
+        }
+    };
+
+    const handleDeleteProduct = async (id) => {
+        if (!window.confirm("Are you sure you want to permanently delete this product?")) return;
+        try {
+            const res = await api.delete(`/products/${id}`);
+            if (res.data.success) {
+                fetchData(activeTab, page);
+            }
+        } catch (err) {
+            console.error("Error deleting product:", err);
+            alert(err.response?.data?.message || 'Error deleting product');
+        }
+    };
+
+    const handleEditSave = async (id, formData) => {
+        try {
+            const res = await api.put(`/products/${id}`, formData);
+            if (res.data.success) {
+                setEditProductModal(null);
+                fetchData(activeTab, page);
+            }
+        } catch (err) {
+            console.error("Error updating product:", err);
+            alert(err.response?.data?.message || 'Error updating product');
         }
     };
 
@@ -205,6 +256,14 @@ const Dashboard = () => {
                 </li>
                 <li className="nav-item">
                     <button 
+                        className={`nav-link ${activeTab === 'nascosti' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
+                        onClick={() => handleTabChange('nascosti')}
+                    >
+                        Hidden
+                    </button>
+                </li>
+                <li className="nav-item">
+                    <button 
                         className={`nav-link ${activeTab === 'venduti' ? 'active font-weight-bold text-success' : 'text-secondary'}`}
                         onClick={() => handleTabChange('venduti')}
                     >
@@ -247,7 +306,20 @@ const Dashboard = () => {
                                     <>
                                         <div className="dashboard-grid">
                                             {vetrinaProducts.map(product => (
-                                                <ProductCard key={product.id} product={product} />
+                                                <div key={product.id} className="d-flex flex-column">
+                                                    <ProductCard product={product} />
+                                                    <div className="d-flex justify-content-between mt-2 px-1">
+                                                        <button className="btn btn-sm btn-outline-primary w-100 me-1" onClick={() => setEditProductModal(product)}>
+                                                            <i className="bi bi-pencil-square"></i> Edit
+                                                        </button>
+                                                        <button className="btn btn-sm btn-outline-warning w-100 mx-1" onClick={() => handleProductStatus(product.id, 'hidden')}>
+                                                            <i className="bi bi-eye-slash"></i> Hide
+                                                        </button>
+                                                        <button className="btn btn-sm btn-outline-danger w-100 ms-1" onClick={() => handleDeleteProduct(product.id)}>
+                                                            <i className="bi bi-trash"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             ))}
                                         </div>
                                         {renderPagination()}
@@ -255,6 +327,39 @@ const Dashboard = () => {
                                 ) : (
                                     <div className="alert alert-info text-center mt-3">
                                         You don't have any products in your showcase yet. <Link to="/add-product">Add your first product!</Link>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Tab Nascosti */}
+                        {activeTab === 'nascosti' && (
+                            <div className="tab-pane active">
+                                {nascostiProducts.length > 0 ? (
+                                    <>
+                                        <div className="dashboard-grid">
+                                            {nascostiProducts.map(product => (
+                                                <div key={product.id} className="d-flex flex-column">
+                                                    <ProductCard product={product} />
+                                                    <div className="d-flex justify-content-between mt-2 px-1">
+                                                        <button className="btn btn-sm btn-outline-primary w-100 me-1" onClick={() => setEditProductModal(product)}>
+                                                            <i className="bi bi-pencil-square"></i> Edit
+                                                        </button>
+                                                        <button className="btn btn-sm btn-outline-success w-100 mx-1" onClick={() => handleProductStatus(product.id, 'active')}>
+                                                            <i className="bi bi-eye"></i> Show
+                                                        </button>
+                                                        <button className="btn btn-sm btn-outline-danger w-100 ms-1" onClick={() => handleDeleteProduct(product.id)}>
+                                                            <i className="bi bi-trash"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {renderPagination()}
+                                    </>
+                                ) : (
+                                    <div className="alert alert-info text-center mt-3">
+                                        You don't have any hidden products.
                                     </div>
                                 )}
                             </div>
@@ -365,6 +470,14 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {editProductModal && (
+                <EditProductModal 
+                    product={editProductModal} 
+                    onClose={() => setEditProductModal(null)} 
+                    onSave={handleEditSave} 
+                />
             )}
         </div>
     );
