@@ -38,20 +38,29 @@ const ProductCard = ({ product }) => {
         ? getImageUrl(imageArray[currentImageIndex]) 
         : '/placeholder.png';
 
+    const isSold = product.status === 'sold';
+
     return (
         <div 
-            className="product-card card-premium"
+            className={`product-card card-premium ${isSold ? 'product-sold' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <Link to={`/product/${product.id}`} className="product-card-link">
+            <Link 
+                to={isSold ? "#" : `/product/${product.id}`} 
+                className={`product-card-link ${isSold ? 'disabled-link' : ''}`}
+                onClick={(e) => { if (isSold) e.preventDefault(); }}
+            >
                 <div className="product-image-container">
                     <img 
                         src={imageUrl} 
                         alt={product.title} 
-                        className="product-image fade-transition" 
+                        className={`product-image fade-transition ${isSold ? 'sold-image-dim' : ''}`} 
                     />
-                    {product.condition && (
+                    {isSold && (
+                        <div className="sold-overlay">SOLD</div>
+                    )}
+                    {product.condition && !isSold && (
                         <span className="product-badge condition-badge">
                             {product.condition}
                         </span>
