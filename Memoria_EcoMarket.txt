@@ -89,7 +89,8 @@ Di seguito la tabella di ripartizione delle singole task per le 10 fasi del prog
 3. REQUISITI DEL SISTEMA
 ================================================================================
 Requisiti Funzionali:
-- Autenticazione: Gli utenti possono registrarsi, fare login e logout. Solo gli utenti autenticati possono comprare, vendere o lasciare recensioni.
+- Autenticazione: È richiesto il login per operare sulla piattaforma (comprare, vendere, recensire). Sebbene l'enunciato preveda che gli utenti possano essere semplicemente pre-caricati nel database, abbiamo sviluppato e integrato come funzionalità aggiuntiva (Extra) un sistema completo di registrazione per i nuovi utenti.
+- Ruoli e Permessi: Il sistema distingue tra utente "User" (che interagisce con il marketplace) e utente "Admin". L'amministratore dispone di viste dedicate per supervisionare gli utenti registrati e monitorare tutte le transazioni (compravendite) della piattaforma.
 - Gestione Prodotti: Possibilità di caricare un nuovo prodotto inserendo titolo, descrizione, prezzo, condizione, categoria, opzioni di spedizione e immagini multiple. I proprietari possono modificare le informazioni di testo, nascondere o eliminare definitivamente i propri annunci.
 - Catalogo e Ricerca: Una vetrina pubblica (esplorabile anche da utenti non loggati) con filtri avanzati (per categoria, condizione, range di prezzo) e barra di ricerca testuale. Paginazione dei risultati.
 - Transazioni: Un utente può proporre l'acquisto di un prodotto. Il venditore può accettare o rifiutare. Una volta accettata, la transazione viene completata.
@@ -158,7 +159,7 @@ Di seguito viene illustrato il viaggio dell'utente ("User Journey") attraverso g
 L'utente arriva sulla HomePage, esplorando il catalogo liberamente. Trova prodotti grazie alla barra di ricerca o ai filtri laterali (categorie, prezzo).
 
 //immagine della pagina di Registrazione / Login.
-Per comprare o vendere, l'utente deve accedere. Se non possiede un account, compila il form di registrazione. La validazione lato frontend assicura che i dati (es. formato email, password sicura) siano corretti prima dell'invio.
+Per comprare o vendere, l'utente deve accedere. Come funzionalità aggiuntiva rispetto ai requisiti base, se l'utente non possiede già un account pre-caricato a sistema, può compilare il form di registrazione. La validazione lato frontend assicura che i dati (es. formato email, password sicura) siano corretti prima dell'invio.
 
 //immagine del Form "Add Product".
 L'utente, dalla propria Dashboard, clicca su "Add Product". Si apre un form dove può inserire dettagli, selezionare condizioni dal menu a tendina e caricare fino a 5 fotografie con anteprima in tempo reale.
@@ -169,8 +170,49 @@ Nella Dashboard l'utente ha il pieno controllo: può monitorare le vendite, acce
 //immagine del Dettaglio Prodotto (Visualizzazione utente compratore con pulsante Buy).
 Selezionando un articolo, si apre il dettaglio. Da qui un acquirente può contattare il venditore o avviare direttamente l'acquisto. La pagina mostra in modo chiaro la galleria fotografica, l'affidabilità del venditore (stelle) e se è prevista la spedizione.
 
+//immagine del Pannello di Amministrazione (Vista esclusiva per il ruolo Admin).
+Gli utenti con ruolo di amministratore (Admin) hanno accesso a una dashboard riservata e separata. Da qui possono visualizzare la lista completa degli utenti registrati sulla piattaforma e monitorare lo stato di tutte le compravendite (transazioni), garantendo così un controllo centralizzato delle attività.
+
 ================================================================================
-8. CONCLUSIONI E SVILUPPI FUTURI
+8. ISTRUZIONI PER L'AVVIO E IL TEST
+================================================================================
+Trattandosi di un progetto full-stack, è necessario avviare separatamente Backend e Frontend.
+
+1. Preparazione Database (Solo la prima volta):
+   Assicurarsi che MySQL sia in esecuzione (es. 'brew services start mysql'). Dalla cartella 'backend', creare il database, importare lo schema e popolare i dati:
+   > mysql -u root -e "CREATE DATABASE IF NOT EXISTS eco_market;"
+   > mysql -u root eco_market < schema.sql
+   > node seed.js
+
+2. Avvio del Backend (Terminale 1):
+   Entrare nella cartella 'backend', installare le dipendenze (solo prima volta) e avviare il server:
+   > cd backend
+   > npm install
+   > node server.js
+   Il backend risponderà su http://localhost:3000. Non chiudere questo terminale.
+
+3. Avvio del Frontend (Terminale 2):
+   In un nuovo terminale, entrare nella cartella 'frontend', installare le dipendenze (solo prima volta) e avviare Vite:
+   > cd frontend
+   > npm install
+   > npm run dev
+   Il frontend risponderà su http://localhost:5173. Non chiudere questo terminale.
+
+Test del Ruolo "Admin" (HBS Views):
+Come richiesto dai criteri di valutazione, l'area di amministrazione è stata realizzata utilizzando il server-side rendering con template engine Handlebars (.hbs). Per testarla:
+- NON utilizzare l'interfaccia React.
+- Navigare direttamente sul server backend: http://localhost:3000/login
+- Effettuare l'accesso con le seguenti credenziali pre-caricate dal seed:
+  Email: admin@ecomarket.it
+  Password: password123
+
+Test del Ruolo "User" (React SPA):
+Per testare la piattaforma come normale utente:
+- Navigare sull'interfaccia frontend: http://localhost:5173
+- Utilizzare uno degli account generati dal seed (es. mario@email.it / password123) oppure registrarne uno nuovo tramite l'apposita funzione aggiuntiva di registrazione.
+
+================================================================================
+9. CONCLUSIONI E SVILUPPI FUTURI
 ================================================================================
 Il progetto EcoMarket ha raggiunto tutti gli obiettivi prefissati, fornendo una piattaforma funzionante in ogni suo aspetto core (CRUD dei prodotti, Auth, Transazioni).
 

@@ -3,8 +3,16 @@
         <h1 class="display-4 fw-bold text-dark mb-4">{{title}}</h1>
         <p class="lead text-muted mb-4">{{description}}</p>
         <div class="d-flex gap-3">
-            <a href="/login" class="btn btn-outline-dark btn-lg px-4">Log in</a>
-            <a href="/register" class="btn btn-primary btn-lg px-4">Start selling</a>
+            {{#if user}}
+                {{#if (eq user.role 'admin')}}
+                    <a href="/admin" class="btn btn-primary btn-lg px-4">Go to Dashboard</a>
+                {{else}}
+                    <a href="http://localhost:5173" class="btn btn-primary btn-lg px-4">Enter Marketplace</a>
+                {{/if}}
+            {{else}}
+                <a href="/login" class="btn btn-outline-dark btn-lg px-4">Log in</a>
+                <a href="/register" class="btn btn-primary btn-lg px-4">Start selling</a>
+            {{/if}}
         </div>
     </div>
     <div class="col-lg-6 text-center mt-5 mt-lg-0">

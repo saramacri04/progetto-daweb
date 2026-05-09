@@ -23,7 +23,11 @@ exports.loginUser = async (req, res) => {
         req.session.userRole = user.role;
         req.session.userName = user.name;
 
-        return res.redirect('/');
+        if (user.role === 'admin') {
+            return res.redirect('/admin');
+        } else {
+            return res.redirect('/');
+        }
     } catch (err) {
         console.error("Login error:", err);
         return res.render('login', { title: 'Login - EcoMarket', error: 'Internal server error.' });
