@@ -47,22 +47,22 @@ export const HowItWorks = () => (
         <h1 className="fw-bold text-center mb-5 text-success">How EcoMarket Works</h1>
         <div className="row mt-5">
             <div className="col-md-4 mb-4 text-center">
-                <div className="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{width: '100px', height: '100px'}}>
-                    <i className="bi bi-camera text-success" style={{fontSize: '3rem'}}></i>
+                <div className="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{width: '100px', height: '100px'}}>
+                    <i className="bi bi-camera text-white" style={{fontSize: '3rem'}}></i>
                 </div>
                 <h3 className="fw-bold">1. Publish</h3>
                 <p className="text-secondary">Take a few photos of your item, describe it accurately, and set a price. It takes less than two minutes.</p>
             </div>
             <div className="col-md-4 mb-4 text-center">
-                <div className="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{width: '100px', height: '100px'}}>
-                    <i className="bi bi-chat-dots text-success" style={{fontSize: '3rem'}}></i>
+                <div className="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{width: '100px', height: '100px'}}>
+                    <i className="bi bi-chat-dots text-white" style={{fontSize: '3rem'}}></i>
                 </div>
                 <h3 className="fw-bold">2. Negotiate</h3>
                 <p className="text-secondary">Receive offers from buyers, accept the best ones, and agree via email on shipping or hand delivery.</p>
             </div>
             <div className="col-md-4 mb-4 text-center">
-                <div className="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{width: '100px', height: '100px'}}>
-                    <i className="bi bi-star text-success" style={{fontSize: '3rem'}}></i>
+                <div className="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{width: '100px', height: '100px'}}>
+                    <i className="bi bi-star text-white" style={{fontSize: '3rem'}}></i>
                 </div>
                 <h3 className="fw-bold">3. Review</h3>
                 <p className="text-secondary">Once the deal is done, leave a review for the seller to help the community grow safely and transparently.</p>

@@ -71,20 +71,35 @@ const Home = () => {
     const catalogRef = useRef(null);
 
     const scrollToCatalog = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Controlliamo che il riferimento esista, poi scorriamo verso di esso
+        if (catalogRef.current) {
+            catalogRef.current.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' // Allinea la parte superiore dell'elemento con la cima della pagina
+            });
+        } else {
+            // Fallback di sicurezza
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     const handleNextPage = () => {
         if (page < totalPages) {
             setPage(prev => prev + 1);
-            scrollToCatalog();
+            // Aspetta 100 millisecondi prima di scorrere
+            setTimeout(() => {
+                scrollToCatalog();
+            }, 100);
         }
     };
 
     const handlePrevPage = () => {
         if (page > 1) {
             setPage(prev => prev - 1);
-            scrollToCatalog();
+            // Aspetta 100 millisecondi prima di scorrere
+            setTimeout(() => {
+                scrollToCatalog();
+            }, 100);
         }
     };
 
