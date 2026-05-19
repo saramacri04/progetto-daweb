@@ -181,7 +181,8 @@ exports.createProduct = async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        const { title, description, price, condition, shipping_available = 0, pickup_location = null, category_id } = req.body;
+        // Added 'primaryIndex' extraction from req.body
+        const { title, description, price, condition, shipping_available = 0, pickup_location = null, category_id, primaryIndex } = req.body;
         const seller_id = req.user.id; // Dal middleware authAPI
 
         // 1. Insert product
@@ -194,10 +195,15 @@ exports.createProduct = async (req, res) => {
 
         // 2. Handle images via Multer
         if (req.files && req.files.length > 0) {
+            
+            const selectedPrimaryIndex = parseInt(primaryIndex) || 0;
+
             const imageValues = req.files.map((file, index) => [
                 productId,
                 `/uploads/products/${file.filename}`, // Public URL
-                index === 0 ? 1 : 0 // The first image is is_primary
+                
+                // MODIFICATO: Compara l'indice del file corrente con quello scelto dall'utente!
+                index === selectedPrimaryIndex ? 1 : 0 
             ]);
 
             await connection.query(

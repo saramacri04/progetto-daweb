@@ -9,14 +9,16 @@ const AddProduct = () => {
         title: '',
         description: '',
         price: '',
-        condition: 'new', // default
-        category_id: '1', // default to first category
+        condition: 'new',
+        category_id: '1',
         shipping_available: false,
         pickup_location: ''
     });
 
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
+    // memoryze index of the image cover
+    const [primaryIndex, setPrimaryIndex] = useState(0); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -28,21 +30,38 @@ const AddProduct = () => {
         });
     };
 
+    // Add new photos to the existing ones, but block if total exceeds 5
     const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
+        const newFiles = Array.from(e.target.files);
         
-        // Limit to 5 images
-        if (files.length > 5) {
-            setError('You can upload a maximum of 5 images.');
+        // Controllo se il totale supera 5
+        if (images.length + newFiles.length > 5) {
+            setError('You can upload a maximum of 5 images in total.');
             return;
         }
 
-        setImages(files);
+        const updatedImages = [...images, ...newFiles];
+        setImages(updatedImages);
 
-        // Generate previews
-        const previews = files.map(file => URL.createObjectURL(file));
+        const previews = updatedImages.map(file => URL.createObjectURL(file));
         setImagePreviews(previews);
         setError('');
+    };
+
+    // Delete images onclick x
+    const removeImage = (indexToRemove) => {
+        const updatedImages = images.filter((_, index) => index !== indexToRemove);
+        const updatedPreviews = imagePreviews.filter((_, index) => index !== indexToRemove);
+        
+        setImages(updatedImages);
+        setImagePreviews(updatedPreviews);
+        
+        // changing index of the cover, if image deleted
+        if (primaryIndex === indexToRemove) {
+            setPrimaryIndex(0); // Torna alla prima
+        } else if (primaryIndex > indexToRemove) {
+            setPrimaryIndex(primaryIndex - 1);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -66,6 +85,9 @@ const AddProduct = () => {
             images.forEach(image => {
                 data.append('images', image);
             });
+            
+            // Sending cover image to backend
+            data.append('primaryIndex', primaryIndex);
 
             const response = await api.post('/products', data, {
                 headers: {
@@ -74,7 +96,6 @@ const AddProduct = () => {
             });
 
             if (response.data && response.data.success) {
-                // Redirect to the newly created product
                 navigate(`/product/${response.data.productId}`);
             } else {
                 setError('Error creating product.');
@@ -218,27 +239,49 @@ const AddProduct = () => {
                                 accept="image/*"
                                 multiple
                                 onChange={handleImageChange}
+                                value="" 
                             />
-                            <div className="form-text">You can upload up to 5 images. The first one will be the cover.</div>
+                            <div className="form-text">You can upload up to 5 images. Select one to set as cover.</div>
                         </div>
 
                         {imagePreviews.length > 0 && (
                             <div className="image-previews-container mt-3">
-                                <h6>Preview:</h6>
+                                <h6>Preview (Select Cover):</h6>
                                 <div className="d-flex flex-wrap gap-2">
                                     {imagePreviews.map((src, index) => (
-                                        <div key={index} className="preview-wrapper position-relative">
-                                            <img 
-                                                src={src} 
-                                                alt={`Preview ${index}`} 
-                                                className="img-thumbnail object-fit-cover"
-                                                style={{ width: '100px', height: '100px' }}
-                                            />
-                                            {index === 0 && (
-                                                <span className="badge bg-success position-absolute top-0 start-0 translate-middle p-1 border border-light rounded-circle">
-                                                    1
-                                                </span>
-                                            )}
+                                        <div key={index} className="preview-wrapper position-relative text-center">
+                                            <div 
+                                                className="position-relative d-inline-block"
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() => setPrimaryIndex(index)}
+                                            >
+                                                <img 
+                                                    src={src} 
+                                                    alt={`Preview ${index}`} 
+                                                    // Green border if selected as cover
+                                                    className={`img-thumbnail object-fit-cover ${primaryIndex === index ? 'border-success border-3' : ''}`}
+                                                    style={{ width: '100px', height: '100px' }}
+                                                />
+                                                {/* X for deleting image */}
+                                                <button 
+                                                    type="button" 
+                                                    className="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle d-flex align-items-center justify-content-center"
+                                                    style={{ width: '22px', height: '22px', padding: 0 }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // avoid triggering cover selection when clicking X
+                                                        removeImage(index);
+                                                    }}
+                                                >
+                                                    &times;
+                                                </button>
+                                                
+                                                {/* Badge "Cover" */}
+                                                {primaryIndex === index && (
+                                                    <span className="badge bg-success position-absolute bottom-0 start-50 translate-middle-x mb-1">
+                                                        Cover
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -253,7 +296,7 @@ const AddProduct = () => {
                     <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/dashboard')}>
                         Cancel
                     </button>
-                    <button type="submit" className="btn btn-success px-5" disabled={loading}>
+                    <button type="submit" className="btn btn-success px-5" disabled={loading || images.length === 0}>
                         {loading ? (
                             <>
                                 <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>

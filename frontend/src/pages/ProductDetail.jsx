@@ -223,6 +223,7 @@ const ProductDetail = () => {
                 )}
               </div>
             </div>
+            
             {user && user.id === product.seller_id ? (
               <div style={{ textAlign: 'center', marginTop: '15px' }}>
                 <p style={{ fontWeight: 'bold', color: '#6c757d', marginBottom: 0 }}>This is your product</p>
@@ -250,6 +251,15 @@ const ProductDetail = () => {
 
         </div>
       </div>
+
+      {/*OK button*/}
+      {user && user.id === product.seller_id && (
+        <div className="d-flex justify-content-center mt-5 mb-3">
+            <Link to="/dashboard" className="btn btn-success px-5 rounded-pill fw-bold shadow-sm" style={{ minWidth: '200px' }}>
+                OK
+            </Link>
+        </div>
+      )}
 
       {/* Offer Modal */}
       {showOfferModal && (

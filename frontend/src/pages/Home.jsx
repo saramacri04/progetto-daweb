@@ -46,7 +46,7 @@ const Home = () => {
         } finally {
             setLoading(false);
         }
-    }, [categoryId, maxPrice, sort, page]);
+    }, [categoryId, searchQuery, condition, maxPrice, sort, page]); // <-- Modifica effettuata qui!
 
     useEffect(() => {
         fetchProducts();
