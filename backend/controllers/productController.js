@@ -2,14 +2,14 @@ const db = require('../db');
 
 exports.getProducts = async (req, res) => {
     try {
-        const { 
-            q, 
-            category_id, 
-            condition, 
-            min_price, 
-            max_price, 
-            sort = 'newest', 
-            page = 1, 
+        const {
+            q,
+            category_id,
+            condition,
+            min_price,
+            max_price,
+            sort = 'newest',
+            page = 1,
             limit = 12,
             seller_id,
             status = 'active'
@@ -22,7 +22,7 @@ exports.getProducts = async (req, res) => {
         // Dynamic query building and parameters
         let whereClauses = [];
         let queryParams = [];
-        
+
         if (status && status !== 'all') {
             whereClauses.push("p.status = ?");
             queryParams.push(status);
@@ -34,9 +34,9 @@ exports.getProducts = async (req, res) => {
         }
 
         if (q) {
-            whereClauses.push("(p.title LIKE ? OR p.description LIKE ?)");
+            whereClauses.push("(p.title LIKE ?)");
             const searchTerm = `%${q}%`;
-            queryParams.push(searchTerm, searchTerm);
+            queryParams.push(searchTerm);
         }
 
         if (category_id) {
@@ -130,9 +130,9 @@ exports.getProductById = async (req, res) => {
             JOIN users u ON p.seller_id = u.id
             WHERE p.id = ? AND p.status IN ('active', 'sold')
         `;
-        
+
         const [rows] = await db.query(sql, [productId]);
-        
+
         if (rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
@@ -146,7 +146,7 @@ exports.getProductById = async (req, res) => {
             WHERE product_id = ?
             ORDER BY is_primary DESC, id ASC
         `;
-        
+
         const [images] = await db.query(imagesSql, [productId]);
         product.images = images.map(img => img.image_url);
 
@@ -157,7 +157,7 @@ exports.getProductById = async (req, res) => {
             WHERE reviewee_id = ?
         `;
         const [ratings] = await db.query(ratingSql, [product.seller_id]);
-        
+
         product.seller_rating = ratings[0].average_rating ? Number(ratings[0].average_rating).toFixed(1) : null;
         product.seller_reviews_count = ratings[0].review_count;
 
@@ -195,15 +195,15 @@ exports.createProduct = async (req, res) => {
 
         // 2. Handle images via Multer
         if (req.files && req.files.length > 0) {
-            
+
             const selectedPrimaryIndex = parseInt(primaryIndex) || 0;
 
             const imageValues = req.files.map((file, index) => [
                 productId,
                 `/uploads/products/${file.filename}`, // Public URL
-                
+
                 // MODIFICATO: Compara l'indice del file corrente con quello scelto dall'utente!
-                index === selectedPrimaryIndex ? 1 : 0 
+                index === selectedPrimaryIndex ? 1 : 0
             ]);
 
             await connection.query(
@@ -257,7 +257,7 @@ exports.archiveProduct = async (req, res) => {
         const { status } = req.body; // status può essere 'hidden' o 'sold'
 
         if (!['hidden', 'sold', 'active'].includes(status)) {
-             return res.status(400).json({ success: false, message: "Invalid status. Choose 'active', 'hidden' or 'sold'" });
+            return res.status(400).json({ success: false, message: "Invalid status. Choose 'active', 'hidden' or 'sold'" });
         }
 
         const [result] = await db.query(
@@ -266,7 +266,7 @@ exports.archiveProduct = async (req, res) => {
         );
 
         if (result.affectedRows === 0) {
-             return res.status(403).json({ success: false, message: 'Not authorized or product non-existent' });
+            return res.status(403).json({ success: false, message: 'Not authorized or product non-existent' });
         }
 
         res.json({ success: true, message: `Product set to ${status}` });
@@ -290,7 +290,7 @@ exports.deleteProduct = async (req, res) => {
 
         // Fetch images to delete them from filesystem
         const [images] = await db.query('SELECT image_url FROM product_images WHERE product_id = ?', [productId]);
-        
+
         for (const img of images) {
             const urlPath = img.image_url.startsWith('/') ? img.image_url.substring(1) : img.image_url;
             const imgPath = path.join(__dirname, '..', 'public', urlPath);
