@@ -102,7 +102,6 @@ async function runSeed() {
 
             // 6: Vintage Denim Jacket
             [6, '/uploads/products/Vintage Denim Jacket/denimjacket1.png', 1],
-            [6, '/uploads/products/Vintage Denim Jacket/denimjacket2.png', 0],
             [6, '/uploads/products/Vintage Denim Jacket/denimjacket3.png', 0],
             [6, '/uploads/products/Vintage Denim Jacket/denimjacket4.png', 0],
 
