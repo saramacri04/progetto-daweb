@@ -38,7 +38,7 @@ const Register = () => {
         setLoading(true);
 
         try {
-            await register({
+            await register({ //calls the context register funcion, which makes the API call
                 name: formData.name,
                 surname: formData.surname,
                 email: formData.email,

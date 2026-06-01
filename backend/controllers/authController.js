@@ -17,7 +17,7 @@ exports.loginUser = async (req, res) => {
         if (!match) {
             return res.render('login', { title: 'Login - EcoMarket', error: 'Incorrect password.' });
         }
-
+        
         // Log in to session
         req.session.userId = user.id;
         req.session.userRole = user.role;

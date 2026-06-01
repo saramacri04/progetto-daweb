@@ -1,19 +1,19 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/api';
 
-const AuthContext = createContext();
+const AuthContext = createContext(); //context creation (empty object)
 
-export const useAuth = () => {
+export const useAuth = () => { //convenience hook
     return useContext(AuthContext);
 };
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }) => { //provider component
+    const [user, setUser] = useState(null); //contiene user state
+    const [loading, setLoading] = useState(true); //loading prevents children from rendering until /auth/me check completes
 
     useEffect(() => {
         // Fetch current session from the backend logic
-        const checkAuthStatus = async () => {
+        const checkAuthStatus = async () => { // session persistence check on app load
             try {
                 // This endpoint will return the user data if the session exists
                 const response = await api.get('/auth/me');
@@ -31,9 +31,10 @@ export const AuthProvider = ({ children }) => {
         checkAuthStatus();
     }, []);
 
+    //used in /pages/Login.jsx
     const login = async (email, password) => {
-        const response = await api.post('/auth/login', { email, password });
-        setUser(response.data.user);
+        const response = await api.post('/auth/login', { email, password }); //Axios POST request
+        setUser(response.data.user); //updates global React Context state (components with useAuth())
         return response.data;
     };
 
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         await api.post('/auth/logout');
-        setUser(null);
+        setUser(null); //clears React state. all protected routes immediately redirect to login
     };
 
     const value = {
@@ -57,8 +58,8 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
+        <AuthContext.Provider value={value}> 
+            {!loading && children} //check complete
         </AuthContext.Provider>
     );
 };

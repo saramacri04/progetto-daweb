@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './Auth.css';
 
 const Login = () => {
+    //local state 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -13,13 +14,13 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // to stop the browser's native form submission, which would cause a page reload
         setError('');
         setLoading(true);
-
+        
         try {
-            await login(email, password);
-            navigate('/dashboard');
+            await login(email, password); //call at the context login function, imported from AuthContext from the useAuth (line 13)
+            navigate('/dashboard'); //react router's programmatic navigation to redirect to the dashboard without a full page reload
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
